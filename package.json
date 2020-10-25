@@ -10,6 +10,7 @@
     "axios": "^0.21.0",
     "bootstrap": "^4.5.3",
     "jquery": "^3.5.1",
+    "moment": "^2.29.1",
     "node-sass": "^4.14.1",
     "patch-package": "^6.2.2",
     "popper.js": "^1.16.1",

@@ -1,11 +1,15 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react'
-
+import moment from "moment"
+import 'moment/locale/de'
+import DateTime from 'react-datetime'
 
 import HttpService from '../helpers/HttpService'
 import Dots from '../helpers/Dots'
 import { l, cl } from '../helpers/Log'
+
+import 'react-datetime/css/react-datetime.css'
 
 
 const createFormData = (type, formObjData, formTextData) => {
@@ -44,14 +48,14 @@ const createFormData = (type, formObjData, formTextData) => {
   , isCurrentClass = isCurrent ? " current" : ""
   , isPrevClass = isPrev ? " prev" : ""
   , isNextClass = isNext ? " next" : ""
-  , [isPacked, setIsPacked] = useState(false)
+  , [isCare, setIsCare] = useState(false)
   , [opts, setOpts] = useState([
-    { name: "Verpackte<br/>Materialien", img: "assets/opt1.png", selected: true },
-    { name: "Sonder-<br/>gepack", img: "assets/opt2.png", selected: false },
-    { name: "Gasförmige<br/>Materialien", img: "assets/opt3.png", selected: false },
-    { name: "Fluide", img: "assets/opt4.png", selected: false },
-    { name: "Schüttgut", img: "assets/opt5.png", selected: false },
-    { name: "Hier nicht aufgeführt", img: "assets/opt6.png", selected: false },
+    { name: "Sonne und Strand", img: "assets/opt1.png", selected: true },
+    { name: "Großstadt<br/>erleben", img: "assets/opt2.png", selected: false },
+    { name: "Naturreisen", img: "assets/opt3.png", selected: false },
+    { name: "Ski und <br/>Winterreisen", img: "assets/opt4.png", selected: false },
+    { name: "Shopping", img: "assets/opt5.png", selected: false },
+    { name: "Partyurlaub", img: "assets/opt6.png", selected: false },
   ])
   , setOpt = idx => {
     // To select just one
@@ -78,9 +82,9 @@ const createFormData = (type, formObjData, formTextData) => {
         .reduce((a, b) => ({
           name: (a.name.length ? (a.name + ', ') : '') + b.name.replace(/<br\s*\/?>/gi, ' ').replace(/-/g, '')
         }), { name: '' }).name,
-      isPacked
+      isCare
     }))
-  }, [opts, isPacked, setFormObj])
+  }, [opts, isCare, setFormObj])
 
   return (
     <div className={`step step1${isCurrentClass}${isPrevClass}${isNextClass}`}>
@@ -88,11 +92,11 @@ const createFormData = (type, formObjData, formTextData) => {
         
         <div className="container">
           <div className="ctn-heading">
-            <h4>Art der Versendung<img onClick={toggleMoreInfo} src="assets/info.png" alt=""/></h4>
+            <h4>Art der Reise<img onClick={toggleMoreInfo} src="assets/info.png" alt=""/></h4>
             <div className="subtitle">Schritt 1 von 7</div>
           </div>
           <div className="ctn-content">
-            <h5>Welche Art von Ware wollen Sie verschiffen?</h5>
+            <h5>Haben Sie Anforderungen an Ihrer Überraschungsreise?</h5>
             <div className="ctn-box">{
               opts.map((opt, idx) => (
                 <div key={idx}
@@ -108,13 +112,13 @@ const createFormData = (type, formObjData, formTextData) => {
               ))
             }</div>
             <div 
-              className={`ctn-check${isPacked? " selected" : ""}`}
-              onClick={() => setIsPacked(!isPacked)} 
+              className={`ctn-check${isCare? " selected" : ""}`}
+              onClick={() => setIsCare(!isCare)} 
               >
               <div className="check-ind">
                 <div className="check-ind-inner"></div>
               </div>
-              <span>Die Sendung ist bereits verpackt.</span>
+              <span>Mir ist alles egal.</span>
             </div>
           </div>
           <div className="ctn-btn">
@@ -128,22 +132,157 @@ const createFormData = (type, formObjData, formTextData) => {
   )
 }
 
-, Step2 = ({ indicators, formObjData, setFormObj, formTextData, setFormText, navigation, toggleMoreInfo }) => {
-  const { numCon } = formTextData
+, Step2 = ({ indicators, formObjData, setFormObj, navigation, toggleMoreInfo }) => {
+  const { previous, next } = navigation
+  , { isNext, isCurrent, isPrev } = indicators
+  , isCurrentClass = isCurrent ? " current" : ""
+  , isPrevClass = isPrev ? " prev" : ""
+  , isNextClass = isNext ? " next" : ""
+  , [isCare, setIsCare] = useState(false)
+  , [opts, setOpts] = useState([
+    { name: "Low Budget", img: "assets/opt1.png", selected: true },
+    { name: "Medium Budget", img: "assets/opt2.png", selected: false },
+    { name: "High Budget", img: "assets/opt3.png", selected: false },
+  ])
+  , setOpt = idx => {
+    // To select just one
+    opts.forEach((opt, i) => {
+      i !== idx && (opt.selected = false)
+      i === idx && (opt.selected = true)
+    })
+    
+    // To select multiple
+    // opts.forEach((opt, i) => (i === idx) && (opt.selected = !opt.selected))
+    
+    setOpts([...opts])
+  }
+  , [travelOpts, setTravelOpts] = useState([
+    { name: "Nur Direktreise", selected: true },
+    { name: "Mehre Städte könnten infrage kommen", selected: false },
+    { name: "Ich werde mit Haustieren verreisen", selected: true },
+    { name: "Keine weiteren Anforderungen", selected: false },
+  ])
+  , setTravelOpt = idx => {
+    
+    // To select multiple
+    travelOpts.forEach((opt, i) => (i === idx) && (opt.selected = !opt.selected))
+    
+    setTravelOpts([...travelOpts])
+  }
+  , doNext = () => {
+    l(formObjData)
+    next()
+  }
+
+  useEffect(() => {
+    setFormObj(prev => ({
+      ...prev, 
+
+      selOpts: opts
+        .filter(opt => opt.selected)
+        .reduce((a, b) => ({
+          name: (a.name.length ? (a.name + ', ') : '') + b.name.replace(/<br\s*\/?>/gi, ' ').replace(/-/g, '')
+        }), { name: '' }).name,
+
+      selTravelOpts: travelOpts
+        .filter(opt => opt.selected)
+        .reduce((a, b) => ({
+          name: (a.name.length ? (a.name + ', ') : '') + b.name.replace(/<br\s*\/?>/gi, ' ').replace(/-/g, '')
+        }), { name: '' }).name,
+      isCare
+    }))
+  }, [opts, travelOpts, isCare, setFormObj])
+
+  return (
+    <div className={`step step2${isCurrentClass}${isPrevClass}${isNextClass}`}>
+      <div className="inner">
+        
+        <div className="container">
+          
+          <div className="ctn-heading">
+            <h4>Art der Reise<img onClick={toggleMoreInfo} src="assets/info.png" alt=""/></h4>
+            <div className="subtitle">Schritt 2 von 7</div>
+          </div>
+
+          <div className="ctn-content">
+            <h5>Was wollen Sie für Ihre Reise ausgeben?</h5>
+            <div className="ctn-box">{
+              opts.map((opt, idx) => (
+                <div key={idx}
+                  className={`box text-center${opt.selected ? " selected":""}`}
+                  onClick={() => {setOpt(idx)}}
+                >
+                  <img src={opt.img} alt=""/>
+                  <span dangerouslySetInnerHTML={{__html: opt.name}}/>
+                  <div className="check-ind">
+                    <div className="check-ind-inner"></div>
+                  </div>
+                </div>
+              ))
+            }</div>
+
+            <div className="ctn-travel-box">
+              <h5>Gibt es sonstige Anfoderungen an die Reise?</h5> 
+              {
+                travelOpts.map((opt, idx) => (
+                  <div 
+                    key={idx}
+                    className={`ctn-check-sq${opt.selected ? " selected":""}`}
+                    onClick={() => {setTravelOpt(idx)}}
+                    >
+                    <div className="check-ind sq">
+                      <div className="check-ind-inner"></div>
+                    </div>
+                    <span>{opt.name}</span>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+
+          <div className="ctn-btn">
+            <button className="btn btn-sec mr-2" onClick={previous}>Zurück</button>
+            <button className="btn btn-acc" onClick={doNext}>Fortfahren</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  )
+}
+
+, Step3 = ({ indicators, formObjData, setFormObj, formTextData, setFormText, navigation, toggleMoreInfo }) => {
+  const { startDate, returnDate } = formObjData
+  , { passengers } = formTextData
   , { previous, next } = navigation
   , { isNext, isCurrent, isPrev } = indicators
   , isCurrentClass = isCurrent ? " current" : ""
   , isPrevClass = isPrev ? " prev" : ""
   , isNextClass = isNext ? " next" : ""
-  , labels = [
-    { text: '0',   waterLevel: -75 },
-    { text: '1/3', waterLevel: -60 },
-    { text: '1/2', waterLevel: -50 },
-    { text: '2/3', waterLevel: -40 },
-    { text: '1',   waterLevel: -20 },    
-  ]
-  , [sliderValue, setSliderValue] = useState(1)
-  , numConArr = [ 
+  , yesterday = DateTime.moment().subtract( 1, 'day' )
+  , validDate = current => current.isAfter(yesterday)
+  , validReturnDate = current => current.isAfter(startDate)
+  // , setDateValue = e => {
+  //   // l(e, typeof e) 
+  //   if(typeof e === "object") setDate(e.toDate())
+  //   else setDate(e)
+  // }
+  , handleChange = (e, type) => {
+    if(typeof e === "object") {
+      switch(type){
+        case 'start':
+          setFormObj(prev => ({ ...prev, startDate: e.toDate() }))
+        break;
+
+        default: // end
+          setFormObj(prev => ({ ...prev, returnDate: e.toDate() }))
+        break;
+      }
+    }
+  }
+  , [isStartFlexible, setIsStartFlexible] = useState(formObjData.isStartFlexible)
+  , [isReturnFlexible, setIsReturnFlexible] = useState(formObjData.isReturnFlexible)  
+  , passArr = [ 
     { label: "1", value: 1 },
     { label: "2", value: 2 },
     { label: "3", value: 3 },
@@ -151,102 +290,14 @@ const createFormData = (type, formObjData, formTextData) => {
     { label: "5", value: 5 },
     { label: "5+", value: 5 },
   ]
-  , [conWeights, setConWeights] = useState([])
   , doNext = () => {
     l(formObjData, formTextData)
     next()
   }
 
   useEffect(() => {
-    setFormObj(prev => ({
-      ...prev,
-      filled: labels[sliderValue]
-    }))
-  }, [sliderValue])
-
-  useEffect(() => {
-    setConWeights([...[...Array(parseInt(numCon)).keys()].map(el => "0.00")])
-  }, [numCon])
-  
-  useEffect(() => {
-    // l(conWeights)
-    setFormObj(prev => ({ ...prev, conWeights }))
-  }, [conWeights])
-
-  return (
-    <div className={`step step2${isCurrentClass}${isPrevClass}${isNextClass}`}>
-      <div className="inner">
-
-        <div className="container">
-          <div className="ctn-heading">
-            <h4>Warenangabe<img onClick={toggleMoreInfo} src="assets/info.png" alt=""/></h4>
-            <div className="subtitle">Schritt 2 von 7</div>
-          </div>
-          <div className="ctn-content">
-            <h5>Wie viel der Ware wollen Sie verschiffen?</h5>
-            <div className="ctn-cargo-ind">
-              <img src="assets/container-empty.png" alt=""/>
-              <img 
-                className="water" 
-                src="assets/water.png" alt=""
-                style={{ bottom: labels[sliderValue].waterLevel }}
-                />
-            </div>
-            <div className="ctn-slider">
-              {/* <Slider 
-                min={0}
-                max={labels.length - 1}
-                step={1}
-                value={sliderValue}
-                renderTooltip={() => labels[sliderValue].text }
-                onChange={setSliderValue}
-                progress
-              /> */}
-              <div className="ctn-label">
-                <span>leer</span>
-                <span>voll</span>
-              </div>
-            </div>
-
-            <h5>Wie viele Kontainer wollen Sie versenden?</h5>
-            <div className="ctn-num">
-              <select 
-                className="select form-control"
-                name="numCon" 
-                value={numCon} 
-                onChange={setFormText}>
-                  <option value="0">Anzahl auswählen</option>
-                  {numConArr.map((obj, idx) => (
-                    <option key={idx} value={obj.value}>{obj.label}</option>
-                  ))}
-              </select>
-            </div>
-          </div>
-          <div className="ctn-btn">
-            <button className="btn btn-sec mr-2" onClick={previous}>Zurück</button>
-            <button className="btn btn-acc" disabled={numCon === "0"} onClick={doNext}>Fortfahren</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-, Step3 = ({ indicators, formObjData, setFormObj, formTextData, navigation, toggleMoreInfo }) => {
-  const { conWeights } = formObjData
-  , { previous, next } = navigation
-  , { isNext, isCurrent, isPrev } = indicators
-  , isCurrentClass = isCurrent ? " current" : ""
-  , isPrevClass = isPrev ? " prev" : ""
-  , isNextClass = isNext ? " next" : ""
-  , handleChange = (e, idx) => {
-    conWeights[idx] = e.target.value
-    setFormObj(prev => ({ ...prev, conWeights }))
-  }
-  , doNext = () => {
-    l(formObjData, formTextData)
-    next()
-  }
+    setFormObj(prev => ({ ...prev, isStartFlexible, isReturnFlexible }))
+  }, [isStartFlexible, isReturnFlexible, setFormObj])
 
   return (
     <div className={`step step3${isCurrentClass}${isPrevClass}${isNextClass}`}>
@@ -254,35 +305,84 @@ const createFormData = (type, formObjData, formTextData) => {
 
         <div className="container">
           <div className="ctn-heading">
-            <h4>Quantität<img onClick={toggleMoreInfo} src="assets/info.png" alt=""/></h4>
+            <h4>Zeitpunkt<img onClick={toggleMoreInfo} src="assets/info.png" alt=""/></h4>
             <div className="subtitle">Schritt 3 von 7</div>
           </div>
+
           <div className="ctn-content">
-            <h5>Wie viel kg oder l wird die gesamte Versendung wiegen?</h5>
-            {/* <pre>{JSON.stringify(conWeights)}</pre> */}
-            {
-              conWeights && conWeights.map((el, i) => (
-                <div className="row mb-4" key={i}>
-                  <div className="col-6">
-                    <div>Gesamtgewicht pro Container</div>
-                    <span>Container der versendet wird</span>
+            <div className="form">
+              
+              <div className="form-group">
+                <h5>Wann wollen sie wehfahren?</h5>
+                <DateTime 
+                  closeOnSelect 
+                  locale="de" 
+                  isValidDate={validDate} 
+                  value={startDate}
+                  timeFormat={false}
+                  onChange={e => handleChange(e, 'start')}
+                  inputProps={{
+                    className: "input form-control",
+                    placeholder: "Departure",
+                  }}
+                />
+                <div 
+                  className={`ctn-check${isStartFlexible? " selected" : ""}`}
+                  onClick={() => setIsStartFlexible(!isStartFlexible)} 
+                  >
+                  <div className="check-ind">
+                    <div className="check-ind-inner"></div>
                   </div>
-                  <div className="col-6 right pl-0">
-                    <div className="unit">kg</div>                
-                    <input 
-                      className="form-control" 
-                      type="text"                       
-                      value={conWeights[i]}
-                      onChange={e => handleChange(e, i)}
-                      placeholder="0.00"/> / Container
-                  </div>
+                  <span>Ich bin zeitlich flexibel</span>
                 </div>
-              ))
-            }
+              </div>
+
+              <div className="form-group">
+                <h5>Wann wollen Sie zurück reisen?</h5>
+                <DateTime 
+                  closeOnSelect 
+                  locale="de" 
+                  isValidDate={validReturnDate} 
+                  value={returnDate}
+                  timeFormat={false}
+                  onChange={e => handleChange(e, 'end')}
+                  inputProps={{
+                    className: "input form-control",
+                    placeholder: "Return",
+                  }}
+                />
+                <div 
+                  className={`ctn-check${isReturnFlexible? " selected" : ""}`}
+                  onClick={() => setIsReturnFlexible(!isReturnFlexible)} 
+                  >
+                  <div className="check-ind">
+                    <div className="check-ind-inner"></div>
+                  </div>
+                  <span>Da bin ich zeitlich flexibel</span>
+                </div>
+              </div>
+
+              <div className="form-group">
+                <h5>Wann wollen Sie zurück reisen?</h5>
+                <select 
+                  className="select form-control"
+                  name="passengers" 
+                  value={passengers} 
+                  onChange={setFormText}>
+                    <option value="0">Anzahl der Reisenden</option>
+                    {passArr.map((obj, idx) => (
+                      <option key={idx} value={obj.value}>{obj.label}</option>
+                    ))}
+                </select>
+              </div>
+
+            </div>
+            
           </div>
+
           <div className="ctn-btn">
             <button className="btn btn-sec mr-2" onClick={previous}>Zurück</button>
-            <button className="btn btn-acc" onClick={doNext}>Fortfahren</button>
+            <button className="btn btn-acc" disabled={passengers === "0"} onClick={doNext}>Fortfahren</button>
           </div>
         </div>
       </div>

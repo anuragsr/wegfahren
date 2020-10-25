@@ -6,7 +6,7 @@ import { l, cl } from '../helpers/Log'
 
 const steps = [ Step1, Step2, Step3, Step4, Step5, Step6, Step7, Step8 ]
 , useModal = () => {
-  const [isShowing, setIsShowing] = useState(false)
+  const [isShowing, setIsShowing] = useState(true)
   , [showMoreInfo, setShowMoreInfo] = useState(false)
   , toggle = () => { setIsShowing(!isShowing) }
   , toggleMoreInfo = () => { setShowMoreInfo(!showMoreInfo) }
@@ -23,28 +23,24 @@ const steps = [ Step1, Step2, Step3, Step4, Step5, Step6, Step7, Step8 ]
 
   // Form data and Navigation
   const textData = {
-    numCon: "0",
-    details: "",
-    email: "",
-    phone: "",
+    passengers: "0",
     fname: "",
     lname: "",
-    street:"",
-    postcode:"",
-    place: "",
+    phone: "",
+    email: "",
   }
   , objData = {
     selOpts: "",
-    isPacked: false,
-    filled: "0",
-    conWeights: [],
-    date: new Date(),
-    isDateCommit: false,
-    files: []
+    selTravelOpts: "",
+    isCare: false,
+    startDate: new Date(),
+    isStartFlexible: true,
+    returnDate: new Date(),
+    isReturnFlexible: true,    
   }
   , [formTextData, setFormText] = useForm(textData)
   , [formObjData, setFormObj] = useState(objData)
-  , { index, navigation } = useStep({ initialStep: 0, steps })
+  , { index, navigation } = useStep({ initialStep: 2, steps })
   , props = { 
     isShowing, toggle, 
     showMoreInfo, toggleMoreInfo,
@@ -61,7 +57,7 @@ const steps = [ Step1, Step2, Step3, Step4, Step5, Step6, Step7, Step8 ]
           <div className="modal-inner">
             <div className="modal-header">
               <div className="logo">
-                <span className="acc">Verschiffen</span>.com
+                <span className="acc">Wegfahren</span>.com
               </div>
               <button 
                 type="button" 
@@ -99,7 +95,7 @@ const steps = [ Step1, Step2, Step3, Step4, Step5, Step6, Step7, Step8 ]
                 </div>
                 <div className="footer-text">
                   <img src="assets/alarm.jpg" alt=""/>
-                  <span className="acc">3 Minuten</span>&nbsp;um deinen Auftrag mehr als 10.000 Freelancern zu zeigen
+                  <span className="acc">3 Minuten</span>&nbsp;um deinen Auftrag mehr als 10.000 Kunden zählt die Plattform bereits
                 </div>
               </div>
             </div>
@@ -113,7 +109,7 @@ const steps = [ Step1, Step2, Step3, Step4, Step5, Step6, Step7, Step8 ]
           <div className="modal-inner">
             <div className="modal-header">
               <div className="logo">
-                <span className="acc">Verschiffen</span>.com
+                <span className="acc">Wegfahren</span>.com
               </div>
               <button 
                 type="button" 
