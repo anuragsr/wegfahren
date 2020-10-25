@@ -17,9 +17,12 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
     isShowing, toggle, 
     showMoreInfo, toggleMoreInfo,
   } = useModal()
-  , [{ vonStadt, nachStadt }, setValue] = useForm({ vonStadt: 'Berlin', nachStadt: 'Shanghai' })
+  , [{ vonStadt, nachStadt, email }, setValue] = useForm({ 
+    vonStadt: 'Berlin', 
+    nachStadt: 'Überraschung',
+    email: ''
+  })
   , onFormSubmit = e => {
-    // l("Submit")
     // l({ vonStadt, nachStadt })
     e.preventDefault()
     toggle()
@@ -29,23 +32,27 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
     const scrollTop = window.pageYOffset + ref.current.getBoundingClientRect().top - 60
     window.scrollTo({ top: scrollTop, behavior: 'smooth' })
   }
+  , onEmailSubmit= e => {
+    l({ email })
+    e.preventDefault()
+  }  
 
   return (
-    <>  
+    <>
       <main className="home">
         <section className="section0" ref={ref0}>
           <div className="container">
             <div className="row">
               <div className="col-lg-7 d-none d-lg-block">
-                <h1 className="desktop-only">Wohin wollen Sie <span className="sc">verschiffen</span>?</h1>
+                <h1 className="desktop-only">Überraschungsreisen.<br/> Endlich <span className="sc">wegfahren</span>!</h1>
                 <h4 className="desktop-only">
-                  In wenigen Schritten zum Angebot.<br/>
-                  100% kostenfrei. Einfach. Unverbindlich.
+                  Lass dich einfach überraschen wo es hingeht.<br/>
+                  Strandurlaub, Skiurlaub, oder Kulturreisen. 
                 </h4>
               </div>
               <div className="col-lg-5">
                 <div className="ctn-search">
-                  <div className="desktop-only title">Finden Sie das beste Angebot</div>
+                  <div className="desktop-only title">Von wo aus wollen Sie fliegen?</div>
                   <div className="mobile-only title">Wohin wollen Sie <span className="acc">verschiffen</span>?</div>
                   <div className="subtitle">Vergleichen Sie eine Vielzahl von Angeboten und finden Sie den für Sie optimalenAngebot.</div>
                   <form onSubmit={onFormSubmit}>
@@ -69,7 +76,7 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
                         name="nachStadt"
                         placeholder="nach Stadt"/>
                     </div>
-                    <button className="btn btn-acc btn-block" type="submit">Suche</button>
+                    <button className="btn btn-acc btn-block" type="submit">Mehr auswählen</button>
                   </form>
                 </div>
               </div>            
@@ -102,7 +109,7 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
             <div className="points">
               <div className="ctn-point row">
                 <div className="col-lg-3 d-none d-lg-block">
-                  <img src="assets/func1.jpg" alt=""/>
+                  <img src="assets/func1.png" alt=""/>
                 </div>
                 <div className="col-2 col-lg-1 num dashed">1</div>
                 <div className="col-10 col-lg-8 text-left">
@@ -131,7 +138,7 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
               </div>
               <div className="ctn-point row">
                 <div className="col-lg-3 d-none d-lg-block">
-                  <img src="assets/func3.jpg" alt=""/>
+                  <img src="assets/func3.png" alt=""/>
                 </div>
                 <div className="col-2 col-lg-1 num">3</div>
                 <div className="col-10 col-lg-8 text-left">
@@ -150,14 +157,14 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
         <section className="section2">
           <div className="container text-center">
             <h2 className="acc">Vorteile</h2>
-            <h1 className="desktop-only">Ein Paket ein Preis</h1>
-            <h1 className="mobile-only">Ein Paket ein Preis</h1>
+            <h1 className="desktop-only">Alle Pakete enthalten</h1>
+            <h1 className="mobile-only">Alle Pakete enthalten</h1>
             <div className="ctn-boxes">
               <div className="row">
                 <div className="col-6 col-lg-4">
                   <div className="box">
                     <img src="assets/th1.png" alt=""/>
-                    <span>Verzollung</span>
+                    <span>Airfares</span>
                     <p>Wir helfen Dir dabei die benötigten Unterlagen auszufüllem</p>
                   </div>
                 </div>
@@ -165,7 +172,7 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
                 <div className="col-6 col-lg-4">
                   <div className="box">
                     <img src="assets/th2.png" alt=""/>
-                    <span>Transport</span>
+                    <span>Hotel</span>
                     <p>Wir helfen Dir dabei die benötigten Unterlagen auszufüllem</p>
                   </div>
                 </div>
@@ -173,7 +180,7 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
                 <div className="col-6 col-lg-4">
                   <div className="box">
                     <img src="assets/th3.png" alt=""/>
-                    <span>Anmeldung</span>
+                    <span>Transfers</span>
                     <p>Wir helfen Dir dabei die benötigten Unterlagen auszufüllem</p>
                   </div>
                 </div>
@@ -181,7 +188,7 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
                 <div className="col-6 col-lg-4">
                   <div className="box">
                     <img src="assets/th4.png" alt=""/>
-                    <span>Versicherung</span>
+                    <span>Baggage</span>
                     <p>Wir helfen Dir dabei die benötigten Unterlagen auszufüllem</p>
                   </div>
                 </div>
@@ -189,7 +196,7 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
                 <div className="col-6 col-lg-4">
                   <div className="box">
                     <img src="assets/th5.png" alt=""/>
-                    <span>Sicherheit </span>
+                    <span>Sicherheit</span>
                     <p>Wir helfen Dir dabei die benötigten Unterlagen auszufüllem</p>
                   </div>
                 </div>
@@ -197,7 +204,7 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
                 <div className="col-6 col-lg-4">
                   <div className="box">
                     <img src="assets/th6.png" alt=""/>
-                    <span>Support</span>
+                    <span>Taxes</span>
                     <p>Wir helfen Dir dabei die benötigten Unterlagen auszufüllem</p>
                   </div>
                 </div>
@@ -208,14 +215,16 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
               <div className="row">
                 <div className="col-lg-7">
                   <h4>
-                    Erhalte direkten Zugang zu den führenden Anbietern
-                    <span className="desktop-only"> auf einer Plattform</span>.
+                    Lassen Sie sich überraschen unbuchen Sie spontan eine Reise.
+                    {/*<span className="desktop-only"> auf einer Plattform</span>.*/}
                   </h4>
                   <p>
-                    Erhalten Sie Echtzeitpreise für verfügbare Kapazitäten 
+                    Reisen ist doch viel spannender und aufgregender, wenn man nicht 
+                    genau weiß was einen erwartet. Buche jetzt deine Reise.
+                    {/*Erhalten Sie Echtzeitpreise für verfügbare Kapazitäten 
                     <span className="desktop-only">
                       und buchen Sie direkt in die Systeme der Fluggesellschaften
-                    </span>
+                    </span>*/}
                   .</p>
                   <button className="desktop-only btn btn-acc" onClick={e => goToSection(e, ref0)}>Jetz beginnen</button>
                 </div>
@@ -272,7 +281,7 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
                   <div className="col-8"><div></div></div>
                   <div className="col-2"><div></div></div>
                 </div>
-                <div className="site-title">Verschiffen.com</div>
+                <div className="site-title">Wegafahren.com</div>
               </div>
               <div className="ctn-layer1">
                 <div className="bm">Best Match</div>
@@ -285,9 +294,9 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
                   </div>
                   <div className="ctn-ship-graphic">
                     <div>
-                      <img className="con" src="assets/container.png" alt=""/>
-                      <img src="assets/ship.png" alt=""/>
-                      <img className="con" src="assets/container.png" alt=""/>
+                      <img className="con" src="assets/si-left.png" alt=""/>
+                      <img src="assets/si-center.png" alt=""/>
+                      <img className="con" src="assets/si-right.png" alt=""/>
                     </div>
                     <div className="bar"></div>
                     <span className="stadt">SHA</span>
@@ -333,8 +342,8 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
                       Send shareable bug tests and get feedback immediately."
                     </p>
                     <div className="r-ft">
-                      <div>12x <img src="assets/cargo 2.png" alt=""/></div>
-                      Berlin <span>to</span> Shanghai
+                      <img src="assets/r1.png" alt=""/><br/>
+                      Sonne & Strande<br/><span className="acc">gebucht</span>
                     </div>
                   </div>
                 </div>
@@ -354,8 +363,8 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
                       Send shareable bug tests and get feedback immediately."
                     </p>
                     <div className="r-ft">
-                      <div>12x <img src="assets/cargo 2.png" alt=""/></div>
-                      Berlin <span>to</span> Shanghai
+                      <img src="assets/r2.png" alt=""/><br/>
+                      Erlebnissreise<br/><span className="acc">gebucht</span>
                     </div>
                   </div>
                 </div>
@@ -375,8 +384,8 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
                       Send shareable bug tests and get feedback immediately."
                     </p>
                     <div className="r-ft">
-                      <div>12x <img src="assets/cargo 2.png" alt=""/></div>
-                      Berlin <span>to</span> Shanghai
+                      <img src="assets/r3.png" alt=""/><br/>
+                      Umweltbewusst<br/><span className="acc">gebucht</span>
                     </div>
                   </div>
                 </div>
@@ -458,49 +467,28 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
         </section>
         
         <section className="section5 desktop-only">
-          <div className="container">
-            <div className="ctn-carousel">
-              <Carousel 
-                lazyLoad={false}
-                dots={false}
-                infinite={false}
-                clickToNavigate={false}
-              >
-                <div className="ctn-carousel-single">
+          <div className="container text-center">
+            <div className="ctn-news row text-left">
+              <div className="col left"></div>
+              <div className="col right">
+                <h4>Gutscheine verschenken.</h4>
+                <p>Melden sie sich für unseren Newsletter an und entdecken Sie Reiseerlebnisse, die Sie lieben werden.</p>
+                <form onSubmit={onEmailSubmit}>
                   <div className="row">
-                    <div className="col-6 h-100 ctn-video"></div>
-                    <div className="col-6 h-100 ctn-testi">
-                      <p>
-                        “Maschinendokumentation und Smart Guide bieten detaillierte 
-                        Anleitungen zur Lösung von aktuell anstehenden Problemen bzw. 
-                        zur Durchführung von Wartungsaufgaben.”
-                      </p> 
-                      <p>
-                        Tim und Dan Joo, Co-founder<br/>
-                        <img src="assets/testi-un.png" alt=""/>
-                      </p>
+                    <div className="col-7 pr-0">
+                      <input type="email" className="form-control" placeholder="Ihre E-Mail-Adresse" />
+                    </div>
+                    <div className="col-5">
+                      <button type="submit" className="btn btn-acc btn-block">Inspieren lassen</button>
                     </div>
                   </div>
-                </div>
-                <div className="ctn-carousel-single">
-                  <div className="row">
-                    <div className="col-6 h-100 ctn-video"></div>
-                    <div className="col-6 h-100 ctn-testi">
-                      <p>
-                        “Maschinendokumentation und Smart Guide bieten detaillierte 
-                        Anleitungen zur Lösung von aktuell anstehenden Problemen bzw. 
-                        zur Durchführung von Wartungsaufgaben.”
-                      </p> 
-                      <p>
-                        Tim und Dan Joo, Co-founder<br/>
-                        <img src="assets/testi-un.png" alt=""/>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              
-              </Carousel>
+                </form>
+              </div>
             </div>
+            <span>
+              Mit der Anmeldung erklären Sie sich mit dem Erhalt von Werbe-E-Mails einverstanden. 
+              Sie können sich jederzeit wieder abmelden. Weitere Informationen finden Sie in unseren <a href="#" className="acc">Datenschutzrichtlinien</a>.
+            </span>
           </div>
         </section>
 
@@ -539,9 +527,10 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
             </div>
             <div className="desktop-only row info">
               <div className="ctn-img">
-                <img src="assets/cargo-dark.png" alt=""/>
-                <img src="assets/cargo-dark.png" alt=""/>
-                <img src="assets/cargo-dark.png" alt=""/>
+                <img src="assets/cp1.png" alt=""/>
+                <img src="assets/cp2.png" alt=""/>
+                <img src="assets/cp3.png" alt=""/>
+                <img src="assets/cp4.png" alt=""/>
               </div>
               <h1>Sie benötigen Unterstützung bei <br/>der Reisebuchung?</h1>
               <p>Unser Experten unterstützen Sie bei der Flugbuchung</p>
@@ -643,8 +632,8 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
         <section className="section7">
           <div className="container text-center">
             <img className="desktop-only" src="assets/starten.png" alt=""/>
-            <p className="desktop-only">Verschiffen Sie Ihre Ware weltweit</p>
-            <p className="mobile-only">Verschiffen Sie Ihre<br/> Ware weltweit</p>
+            <p className="desktop-only">Jetzt Überraschungsreise buchen</p>
+            <p className="mobile-only">Jetzt Überraschungsreise<br/> buchen</p>
             <button className="desktop-only btn btn-acc mr-3" onClick={e => goToSection(e, ref0)}>Angebot ansehen</button>
             <button className="desktop-only btn btn-sec" onClick={e => goToSection(e, ref0)}>Jetzt vergleichen</button>
             <button className="mobile-only btn btn-acc" onClick={e => goToSection(e, ref0)}>Jetzt starten</button>

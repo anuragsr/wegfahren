@@ -15,7 +15,7 @@ nav.navbar{
   }
   &.scrolled{
     padding-top: 10px;
-    .navbar-brand, li.nav-item a{    
+    .navbar-brand .sc, li.nav-item a, li.nav-item.ph a{    
       color: $w;
     }
     .navbar-toggler-icon div{ 
@@ -59,9 +59,9 @@ nav.navbar{
         color: rgba($sc, 1);
       }
     }
-    a{
-      color: rgba($w, .7);
-      &:hover{ color: rgba($w, 1); }
+    a{      
+      color: rgba($w, 1);
+      &:hover{ color: rgba($w, .7); }
     }
     button{
       background: $tr;

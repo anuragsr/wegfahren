@@ -18,9 +18,16 @@ main.home{
     // Page Sections
     &.section0{
       @extend %j-c;
-      height: 70vh;
-      background: $acc;
+      height: 80vh;
       color: $w;
+      padding-bottom: 0;
+      background: 
+        url(../img/bg-left.png) no-repeat,
+        url(../img/bg-right.png) no-repeat,
+        $acc;
+      background-size: 35vh, 25vh;
+      background-position: 0% 75%, 100% 55%;
+
       @include media("<=tab"){
         padding-top: 15vh;
         height: 90vh;
@@ -72,6 +79,9 @@ main.home{
             height: 35px;
             padding-left: 0;
             border: none;
+            &[name="nachStadt"]{
+              color: $acc;
+            }
           }
         }
         button{ 
@@ -258,8 +268,8 @@ main.home{
           height: 66px;
           margin-bottom: 20px;
           img{ 
-            height: 25px; 
-            @include media("<=tab"){ height: 20px; }
+            height: 15px; 
+            @include media("<=tab"){ height: 10px; }
           }
         }
       }
@@ -335,11 +345,15 @@ main.home{
             @include media("<=tab"){ transform: translateX(8px); }
             >div:first-of-type{ 
               text-align: right; 
-              transform: scale(0.8) translate(0px, 20px);
+              @include media("<=tab"){ 
+                transform: scale(0.8) translate(0px, 20px);
+              }
             }
             >div:last-of-type{ 
               text-align: left; 
-              transform: scale(0.8) translate(0px, 20px);
+              @include media("<=tab"){ 
+                transform: scale(0.8) translate(0px, 20px);
+              }
             }
             .date{
               font-family: $ex-r;
@@ -446,10 +460,10 @@ main.home{
           font-size: 20px;
           div{ color: $acc; }
           img{ 
-            height: 70px;  margin-left: 10px; 
-            position: relative; top: -7px;
+            height: 60px;  margin-left: 10px; 
+            // position: relative; top: -7px;
           }
-          span{ font-family: $ex-r; }
+          // span{ font-family: $ex-r; }
         }
       }
       
@@ -475,44 +489,23 @@ main.home{
     }
 
     &.section5{
-      .carousel{
-        .carousel-track{ @extend %fw; }
-        .carousel-slide{ @extend %fw; }
-        .carousel-arrow{
-          bottom: unset;
-          top: calc(50% - 14px);
-          border: none!important;
-          color: rgba(37, 58, 65, 0.5);
-          box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.1);
-          background-color: #fcfcfc;
-          &.carousel-left-arrow{ left: -12px; }
-          &.carousel-right-arrow{ right: -12px; }
+      .ctn-news{
+        background: $sc;
+        color: $w;
+        height: 320px;
+        .left{
+          background: url(../img/newsletter.png) no-repeat center;
+          background-size: cover;
         }
-        .ctn-carousel-single{
-          @extend %fw;
-          padding: 20px;
-          .row{
-            border-radius: 4px;
-            box-shadow: 0 4px 4px 0 rgba($b, 0.1);
-            height: 350px;
-            overflow: hidden;
-          }
-          .ctn-video{
-            background: url(../img/video-ol.jpg) no-repeat center;
-            background-size: cover;
-          }
-          .ctn-testi{
-            @extend %j-c;
-            flex-direction: column;
-            align-items: flex-start;
-            padding: 35px;
-            font-family: $os-r;
-            p:first-of-type{ font-size: 17px; }
-            p:last-of-type{ font-size: 15px; margin-top: 25px; }
-            img{ height: 35px; margin-top: 25px;}
-          }
+        .right{
+          padding: 30px;
+          h4{ font-size: 30px; }
+          p{ font-family: $ex-r; font-size: 20px; margin: 40px 0; }
+          input{ font-size: 17px; }
+          button{ font-family: $ex-r; }
         }
       }
+      span{ font-size: 11px; font-family: $os-r; }
     }
 
     &.section6{
@@ -558,7 +551,7 @@ main.home{
           flex-direction: column;
           .ctn-img {
             margin-top: 100px;
-            img{ height: 25px; margin: 10px; }
+            img{ height: 35px; margin: 10px; }
           }
           p{ margin: 25px 0; }      
           p:not(:nth-of-type(2)){ font-family: $os-r; }

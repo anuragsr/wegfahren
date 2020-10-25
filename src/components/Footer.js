@@ -11,7 +11,7 @@ export default function Footer(){
         <div className="row ctn-footer">
           <div className="col-md-5 col-left">
             <h4 className="links">
-              <Link to="/">Verschiffen.com</Link>
+              <Link to="/">Wegfahren.com</Link>
             </h4>
             <p>
               Mit unserem engagierten Kundenservice sind wir für dich da! 
@@ -52,7 +52,7 @@ export default function Footer(){
           </div>
         </div>
         <div className="text-center">
-          Verschiffen.com 2020
+          Wegfahren.com 2020
         </div>
       </div>
       <div className="container mobile-only">
@@ -74,7 +74,7 @@ export default function Footer(){
         </div>
         <div className="logo text-center">
           <NavLink to="/">          
-            <span className="acc">Verschiffen</span>.com
+            <span className="acc">Wegfahren</span>.com
           </NavLink>
         </div>
         <div className="ctn-icons text-center">
@@ -85,7 +85,7 @@ export default function Footer(){
           <a href="#"><img src="assets/instagram.png" alt=""/></a>
         </div>
         <div className="text-center">
-          <p>Verschiffen.com ist ein Deutsches<br/> Unternehmen mit Firmensitz Berlin.</p>
+          <p>Wegfahren.com ist ein Deutsches<br/> Unternehmen mit Firmensitz Berlin.</p>
           <p>Oranienburger Str. 103,<br/>10117 Berlin</p>
         </div>
       </div>
