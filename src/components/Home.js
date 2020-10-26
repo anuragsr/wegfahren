@@ -3,8 +3,8 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useRef, useState, useEffect } from 'react'
 import { useForm } from 'react-hooks-helper'
-// import { Link, NavLink } from 'react-router-dom'
 import Carousel from 'react-img-carousel'
+
 import { Modal, useModal } from './Modal'
 import { l, cl } from '../helpers/Log'
 
@@ -151,6 +151,10 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
               </div>
             </div>
             <button className="btn btn-acc" onClick={e => goToSection(e, ref0)}>Jetz beginnen</button>
+            <div className="mobile-only foot-link">
+              Sie finden nicht wonach Sie suchen?
+              <div><a href={void(0)} className="acc">Alle Vorteile finden Sie hier</a></div>
+            </div>
           </div>        
         </section>
 
@@ -253,7 +257,7 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
             <h2 className="desktop-only acc">Angebot auswählen</h2>
             <h1 className="desktop-only">Wählen Sie ihr passendes<br/> Angebot</h1>
             <h2 className="mobile-only acc">Angebot auswählen</h2>
-            <h1 className="mobile-only">Angebote perfekt vergleichen</h1>
+            <h1 className="mobile-only">Lass Sie es sich <br/>überraschen</h1>
             <div className="ctn-bm-outer">
               <div className="ctn-layer0">
                 <div className="row">
@@ -400,7 +404,7 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
                 dots={false}
                 infinite={false}
                 clickToNavigate={false}
-              >
+                >
                 <div className="box">
                   <div className="ctn-stars">
                     <img src="assets/star2.png" alt=""/>
@@ -416,8 +420,8 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
                     Send shareable bug tests and get feedback immediately."
                   </p>
                   <div className="r-ft">
-                    <div>12x <img src="assets/cargo 2.png" alt=""/></div>
-                    Berlin <span>to</span> Shanghai
+                    <img src="assets/r1.png" alt=""/><br/>
+                    Sonne & Strande<br/><span className="acc">gebucht</span>
                   </div>
                 </div>
               
@@ -436,8 +440,8 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
                     Send shareable bug tests and get feedback immediately."
                   </p>
                   <div className="r-ft">
-                    <div>12x <img src="assets/cargo 2.png" alt=""/></div>
-                    Berlin <span>to</span> Shanghai
+                    <img src="assets/r2.png" alt=""/><br/>
+                    Erlebnissreise<br/><span className="acc">gebucht</span>
                   </div>
                 </div>
               
@@ -456,12 +460,14 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
                     Send shareable bug tests and get feedback immediately."
                   </p>
                   <div className="r-ft">
-                    <div>12x <img src="assets/cargo 2.png" alt=""/></div>
-                    Berlin <span>to</span> Shanghai
+                    <img src="assets/r3.png" alt=""/><br/>
+                    Umweltbewusst<br/><span className="acc">gebucht</span>
                   </div>
                 </div>
                 
               </Carousel>
+            
+              <img src="assets/trustpilot.jpg" alt=""/>              
             </div>
           </div>
         </section>
@@ -534,7 +540,7 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
               </div>
               <h1>Sie benötigen Unterstützung bei <br/>der Reisebuchung?</h1>
               <p>Unser Experten unterstützen Sie bei der Flugbuchung</p>
-              <p className="acc"><img height="20" src="assets/phone.png" alt=""/>&nbsp;+49 (175) 91234</p>
+              <p className="acc"><img src="assets/phone.png" alt=""/>&nbsp;+49 (175) 91234</p>
               <p>
                 Telefonisch erreichbar Montag bis Freitag von 8:00 bis 20:00 Uhr (UTC -5). 
                 Sie können auch einen <a href="#" className="acc">Rückruf anfordern.</a>
@@ -544,7 +550,9 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
         </section>
         
         <section className="section-faq mobile-only">
-          <div className="container">
+          <div className="container text-center">
+            <h2 className="acc">FAQ</h2>
+            <h1>Häufig gestellte<br/> Fragen</h1>
 
             <div className="ctn-qa">
               <div className="ctn-q">

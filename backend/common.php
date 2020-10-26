@@ -25,30 +25,29 @@
 
         case "user": 
 
-          $ship_type = "Packed: ";
-          if($data["isPacked"] === "true") $ship_type.= "Yes";
-          else $ship_type.= "No";
-          $ship_type.=", Type: ". $data["selOpts"];
+          $trip_type = "Care about location: ";
+          if($data["isCare"] === "true") $trip_type.= "Yes";
+          else $trip_type.= "No";
+          $trip_type.=", Budget: ". $data["selOpts"];
 
           $username = $data['fname'] ." ". $data['lname'];
           $headers = "MIME-Version: 1.0". $eol;
           $headers.= "Content-type:text/html;charset=UTF-8". $eol;
-          $headers.= "From: Paul from Verschiffen <paul@cloudbasiert.com>";
+          $headers.= "From: Paul from Wegfahren <paul@cloudbasiert.com>";
 
           $to = $data['email'];
-          $subject = $username." | Email from Verschiffen.com";
+          $subject = $username." | Email from Wegfahren.com";
 
           $txt = "<div style='font-size: 1rem;'>";
           $txt.= "  Hi ".$username.",<br/><br/>";
-          $txt.= "  Thanks for booking the shipment.<br/>Below are your details:<br/><br/>";
-          $txt.= "  <b>Shipment details: </b><br/>";
-          $txt.= "  ".$ship_type."<br/>";
-          $txt.= "  Containers: ".$data["numCon"].", Filled: ".$data["filled"].", Container Weights: ".$data["conWeights"]."<br/>";
-          $txt.= "  <b>Shipment Address: </b>".$data['street'].", ".$data['postcode'].", ".$data['place']."<br/>";
+          $txt.= "  Thanks for booking the trip.<br/>Below are your details:<br/><br/>";
+          $txt.= "  <b>Trip details: </b><br/>";
+          $txt.= "  ".$trip_type."<br/>";
+          $txt.= "  Travel Options: ".$data["selTravelOpts"]."<br/>";          
           $txt.= "  <b>Your Email: </b>".$data['email']."<br/>";
           $txt.= "  <b>Your Telephone: </b>".$data['phone']."<br/><br/>";      
           $txt.= "  Thanks and Regards,<br/>";
-          $txt.= "  Paul from Verschiffen";
+          $txt.= "  Paul from Wegfahren";
           $txt.= "</div>";          
 
           $emailObj = array(
@@ -66,25 +65,25 @@
 
         default: // company
           
-          $ship_id = $data['ship_id'];
-          $path = $data['path'];
+          $trip_id = $data['trip_id'];
+          // $path = $data['path'];
 
-          // Create Zip file with contents of folder
-          $arr = array();
-          $attName = "attachments_".$ship_id." - ".$username.".zip";
-          $zipFile  = $path."/".$attName;
-          Common::zipData($path, $zipFile, $arr);
+          // // Create Zip file with contents of folder
+          // $arr = array();
+          // $attName = "attachments_".$trip_id." - ".$username.".zip";
+          // $zipFile  = $path."/".$attName;
+          // Common::zipData($path, $zipFile, $arr);
 
-          // Preparing attachments
-          $content = file_get_contents($zipFile);
-          $content = chunk_split(base64_encode($content));
+          // // Preparing attachments
+          // $content = file_get_contents($zipFile);
+          // $content = chunk_split(base64_encode($content));
 
           // a random hash will be necessary to send mixed content
           $separator = md5(time());
 
           // Common Headers for email
           // main header (multipart mandatory)
-          $headers = "From: Verschiffen Team <team@verschiffen.com>" . $eol;
+          $headers = "From: Wegfahren Team <team@wegfahren.com>" . $eol;
           $headers .= "Reply-To: felix.gerlach.gera@googlemail.com" . $eol;
           $headers .= "Return-Path: felix.gerlach.gera@googlemail.com" . $eol;
           $headers .= "MIME-Version: 1.0" . $eol;
@@ -92,10 +91,10 @@
           $headers .= "Content-Transfer-Encoding: 7bit" . $eol;
           $headers .= "This is a MIME encoded message." . $eol;
           
-          $ship_type = "Packed: ";
-          if($data["isPacked"] === "true") $ship_type.= "Yes";
-          else $ship_type.= "No";
-          $ship_type.=", Type: ". $data["selOpts"];
+          $trip_type = "Care about location: ";
+          if($data["isCare"] === "true") $trip_type.= "Yes";
+          else $trip_type.= "No";
+          $trip_type.=", Budget: ". $data["selOpts"];
 
           // Email Text
           $txt = "<div style='font-size: 1rem;'>";
@@ -104,13 +103,12 @@
           $txt.= "  <b>Name: </b>".$username."<br/>";
           $txt.= "  <b>Email: </b>".$data['email']."<br/>";
           $txt.= "  <b>Telephone: </b>".$data['phone']."<br/>";
-          $txt.= "  <b>Shipment details: </b><br/>";
-          $txt.= "  ".$ship_type."<br/>";
-          $txt.= "  Containers: ".$data["numCon"].", Filled: ".$data["filled"].", Container Weights: ".$data["conWeights"]."<br/>";
-          $txt.= "  <b>Shipment Address: </b>".$data['street'].", ".$data['postcode'].", ".$data['place']."<br/>";          
+          $txt.= "  <b>Trip details: </b><br/>";
+          $txt.= "  ".$trip_type."<br/>";
+          $txt.= "  Travel Options: ".$data["selTravelOpts"]."<br/>";
           $txt.= "  <b>Submission Date & Time: </b>".$date."<br/><br/>";
           $txt.= "  Thanks and Regards,<br/>";
-          $txt.= "  Verschiffen Team";
+          $txt.= "  Wegfahren Team";
           $txt.= "</div>";
 
           // Message
@@ -119,17 +117,17 @@
           $body .= "Content-Transfer-Encoding: 8bit" . $eol. $eol;
           $body .= $txt . $eol;
 
-          // Email Attachment
-          $body .= "--" . $separator . $eol;
-          $body .= "Content-Type: application/octet-stream; name=\"" . $attName . "\"" . $eol;
-          $body .= "Content-Transfer-Encoding: base64" . $eol;
-          $body .= "Content-Disposition: attachment" . $eol. $eol;
-          $body .= $content . $eol;
+          // // Email Attachment
+          // $body .= "--" . $separator . $eol;
+          // $body .= "Content-Type: application/octet-stream; name=\"" . $attName . "\"" . $eol;
+          // $body .= "Content-Transfer-Encoding: base64" . $eol;
+          // $body .= "Content-Disposition: attachment" . $eol. $eol;
+          // $body .= $content . $eol;
 
           $body .= "--" . $separator . "--";
 
           $to = implode(", ", $GLOBALS['recipients']);
-          $subject = "New Shipment @ Verschiffen - ".$username;
+          $subject = "New Shipment @ Wegfahren - ".$username;
 
           $emailObj = array(
             "to" => $to,

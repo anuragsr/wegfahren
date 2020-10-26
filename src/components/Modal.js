@@ -1,12 +1,16 @@
 import React, { useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useForm, useStep } from 'react-hooks-helper'
-import { Step1, Step2, Step3, Step4, Step5, Step6, Step7, Step8 } from "./Steps"
+import moment from "moment"
+import DateTime from 'react-datetime'
+
+import { Step1, Step2, Step3, Step4, Step5 } from "./Steps"
 import { l, cl } from '../helpers/Log'
 
-const steps = [ Step1, Step2, Step3, Step4, Step5, Step6, Step7, Step8 ]
+const steps = [ Step1, Step2, Step3, Step4, Step5 ]
+, stepData = { initialStep: 0, steps }
 , useModal = () => {
-  const [isShowing, setIsShowing] = useState(true)
+  const [isShowing, setIsShowing] = useState(false)
   , [showMoreInfo, setShowMoreInfo] = useState(false)
   , toggle = () => { setIsShowing(!isShowing) }
   , toggleMoreInfo = () => { setShowMoreInfo(!showMoreInfo) }
@@ -31,16 +35,16 @@ const steps = [ Step1, Step2, Step3, Step4, Step5, Step6, Step7, Step8 ]
   }
   , objData = {
     selOpts: "",
-    selTravelOpts: "",
     isCare: false,
+    selTravelOpts: "",
     startDate: new Date(),
     isStartFlexible: true,
-    returnDate: new Date(),
+    returnDate: DateTime.moment().add( 1, 'day' ).toDate(),
     isReturnFlexible: true,    
   }
   , [formTextData, setFormText] = useForm(textData)
   , [formObjData, setFormObj] = useState(objData)
-  , { index, navigation } = useStep({ initialStep: 2, steps })
+  , { index, navigation } = useStep(stepData)
   , props = { 
     isShowing, toggle, 
     showMoreInfo, toggleMoreInfo,
@@ -86,7 +90,7 @@ const steps = [ Step1, Step2, Step3, Step4, Step5, Step6, Step7, Step8 ]
             </div>
             <div className="modal-footer-custom">
               <div className="progress">
-                <div className="bar" style={{ width: `${12.5*(index + 1)}%` }}></div>
+                <div className="bar" style={{ width: `${20*(index + 1)}%` }}></div>
               </div>
               <div className="content">
                 <div className="btn-back" onClick={toggle}>

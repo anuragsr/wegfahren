@@ -11,11 +11,11 @@ switch(env){
     break;
   
   case "prod": 
-    apiHost = 'https://cloudbasiert.com/vs/backend'
+    apiHost = 'https://cloudbasiert.com/wf/backend'
     break;
   
   default: // local
-    apiHost = 'http://localhost/verschiffen-be/backend'
+    apiHost = 'http://localhost/wegfahren-be/backend'
     break; 
 }
 
