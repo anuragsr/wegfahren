@@ -53,8 +53,13 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
               <div className="col-lg-5">
                 <div className="ctn-search">
                   <div className="desktop-only title">Von wo aus wollen Sie fliegen?</div>
-                  <div className="mobile-only title">Wohin wollen Sie <span className="acc">verschiffen</span>?</div>
-                  <div className="subtitle">Vergleichen Sie eine Vielzahl von Angeboten und finden Sie den für Sie optimalenAngebot.</div>
+                  <div className="mobile-only title">
+                    Überraschungsreise buchen und <span className="acc">wegfahren</span>.
+                  </div>
+                  <div className="subtitle">
+                    Lass dich einfach überraschen wo es hingeht.<br/>
+                    Strandurlaub, Skiurlaub, oder Kulturreisen.
+                  </div>
                   <form onSubmit={onFormSubmit}>
                     <div className="form-group">
                       <label htmlFor="">VON</label>
