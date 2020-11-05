@@ -15,13 +15,21 @@ nav.navbar{
   }
   &.scrolled{
     padding-top: 10px;
-    .navbar-brand .sc, li.nav-item a, li.nav-item.ph a{    
+    .navbar-brand .sc, li.nav-item.ph a{    
       color: $w;
     }
     .navbar-toggler-icon div{ 
       background: $w;
     }
     background: rgba($sc, 1);
+
+    li.nav-item a{      
+      color: rgba($w, 1);
+      &:hover{ 
+        // font-family: $os-b; 
+        color: rgba($w, .7); 
+      }
+    }
   }
   a{ cursor: pointer; }
   .navbar-toggler{
@@ -66,7 +74,8 @@ nav.navbar{
       color: rgba($w, 1);
       &:hover{ 
         font-family: $os-b; 
-        color: rgba($w, .7); 
+        // color: rgba($w, .7); 
+        color: rgba($sc, 1); 
       }
     }
     button{

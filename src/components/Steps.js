@@ -12,8 +12,8 @@ import { l, cl } from '../helpers/Log'
 import 'react-datetime/css/react-datetime.css'
 
 
-const createFormData = (type, formObjData, formTextData) => {
-  l(formObjData, formTextData)
+const createFormData = (type, formObjData, formTextData, vonStadt, nachStadt) => {
+  l(formObjData, formTextData, vonStadt, nachStadt)
 
   const formData = new FormData()
   , mySqlDate = function(date) {
@@ -26,17 +26,15 @@ const createFormData = (type, formObjData, formTextData) => {
   }
   
   formData.append("type", type)
+  formData.append("vonStadt", vonStadt)
+  formData.append("nachStadt", nachStadt)
 
   for(const key in formTextData){ formData.append(key, formTextData[key]) }
   for(const key in formObjData){
-    switch(key){
-      // case "files": files.forEach(x => formData.append("files[]", x)); break;
-      // case "filled": formData.append(key, formObjData[key]["text"]); break;
-      // case "conWeights": formData.append(key, formObjData[key].map(w => w+" kg").join(", ")); break;
+    switch(key){      
       case "startDate":
       case "returnDate": 
-          
-          formData.append(key, mySqlDate(formObjData[key])); break;
+        formData.append(key, mySqlDate(formObjData[key])); break;
 
       default: formData.append(key, formObjData[key]);
     }
@@ -100,7 +98,35 @@ const createFormData = (type, formObjData, formTextData) => {
           </div>
           <div className="ctn-content">
             <h5>Haben Sie Anforderungen an Ihrer Überraschungsreise?</h5>
-            <div className="ctn-box">{
+            <div className="ctn-box desktop-only">{
+              opts.slice(0, opts.length / 2).map((opt, idx) => (
+                <div key={idx}
+                  className={`box text-center${opt.selected ? " selected":""}`}
+                  onClick={() => {setOpt(idx)}}
+                >
+                  <img src={opt.img} alt=""/>
+                  <span dangerouslySetInnerHTML={{__html: opt.name}}/>
+                  <div className="check-ind">
+                    <div className="check-ind-inner"></div>
+                  </div>
+                </div>
+              ))
+            }</div>
+            <div className="ctn-box desktop-only">{
+              opts.slice(opts.length / 2, opts.length).map((opt, idx) => (
+                <div key={idx}
+                  className={`box text-center${opt.selected ? " selected":""}`}
+                  onClick={() => {setOpt(idx + opts.length / 2)}}
+                >
+                  <img src={opt.img} alt=""/>
+                  <span dangerouslySetInnerHTML={{__html: opt.name}}/>
+                  <div className="check-ind">
+                    <div className="check-ind-inner"></div>
+                  </div>
+                </div>
+              ))
+            }</div>
+            <div className="ctn-box mobile-only">{
               opts.map((opt, idx) => (
                 <div key={idx}
                   className={`box text-center${opt.selected ? " selected":""}`}
@@ -393,7 +419,7 @@ const createFormData = (type, formObjData, formTextData) => {
   )
 }
 
-, Step4 = ({ indicators, formObjData, formTextData, setFormText, navigation, toggleMoreInfo }) => {  
+, Step4 = ({ indicators, formObjData, formTextData, setFormText, navigation, toggleMoreInfo, vonStadt, nachStadt }) => {  
   const { fname, lname, email, phone } = formTextData
   , { previous, next } = navigation
   , { isNext, isCurrent, isPrev } = indicators
@@ -416,7 +442,10 @@ const createFormData = (type, formObjData, formTextData) => {
     // setTimeout(() => { next() }, 1000)
     
     new HttpService()    
-    .post('/process.php', createFormData("addTrip", formObjData, formTextData))
+    .post('/process.php', createFormData(
+      "addTrip", formObjData, formTextData,
+      vonStadt, nachStadt
+    ))
     .then(res => {
       const { data } = res
       l(data)
@@ -511,15 +540,20 @@ const createFormData = (type, formObjData, formTextData) => {
   )
 }
 
-, Step5 = ({ indicators, toggle, formObjData, formTextData, toggleMoreInfo }) => {  
+, Step5 = ({ indicators, navigation, toggle, formObjData, formTextData, toggleMoreInfo, vonStadt, nachStadt }) => {  
   const { isNext, isCurrent, isPrev } = indicators
   , isCurrentClass = isCurrent ? " current" : ""
   , isPrevClass = isPrev ? " prev" : ""
   , isNextClass = isNext ? " next" : ""
   , closeQuestionnaire = () => {
     toggle()
+    navigation.next()
+
     new HttpService()    
-    .post('/process.php', createFormData("sendMailToUser", formObjData, formTextData))
+    .post('/process.php', createFormData(
+      "sendMailToUser", formObjData, formTextData,
+      vonStadt, nachStadt
+    ))
     .then(res => {
       const { data } = res
       l(data)

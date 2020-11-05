@@ -22,7 +22,8 @@ const steps = [ Step1, Step2, Step3, Step4, Step5 ]
 }
 , Modal = ({ 
   isShowing, toggle, 
-  showMoreInfo, toggleMoreInfo
+  showMoreInfo, toggleMoreInfo,
+  vonStadt, nachStadt
 }) => {
 
   // Form data and Navigation
@@ -48,10 +49,12 @@ const steps = [ Step1, Step2, Step3, Step4, Step5 ]
   , props = { 
     isShowing, toggle, 
     showMoreInfo, toggleMoreInfo,
+    vonStadt, nachStadt, 
     formTextData, setFormText, 
-    formObjData, setFormObj, 
+    formObjData, setFormObj,
     navigation
   }
+  , goBack = () => index === 0 ? toggle() : navigation.previous()
 
   return createPortal(
     <>
@@ -93,7 +96,7 @@ const steps = [ Step1, Step2, Step3, Step4, Step5 ]
                 <div className="bar" style={{ width: `${20*(index + 1)}%` }}></div>
               </div>
               <div className="content">
-                <div className="btn-back" onClick={toggle}>
+                <div className="btn-back" onClick={goBack}>
                   <img src="assets/arr-left-tr.png" alt=""/>
                   <span>Zurück</span>
                 </div>

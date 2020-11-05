@@ -42,6 +42,7 @@
           $txt.= "  Hi ".$username.",<br/><br/>";
           $txt.= "  Thanks for booking the trip.<br/>Below are your details:<br/><br/>";
           $txt.= "  <b>Trip details: </b><br/>";
+          $txt.= "  <b>From: </b>".$data["vonStadt"].", <b>To: </b>".$data["nachStadt"]."<br/>";
           $txt.= "  ".$trip_type."<br/>";
           $txt.= "  Travel Options: ".$data["selTravelOpts"]."<br/>";          
           $txt.= "  <b>Your Email: </b>".$data['email']."<br/>";
@@ -66,17 +67,6 @@
         default: // company
           
           $trip_id = $data['trip_id'];
-          // $path = $data['path'];
-
-          // // Create Zip file with contents of folder
-          // $arr = array();
-          // $attName = "attachments_".$trip_id." - ".$username.".zip";
-          // $zipFile  = $path."/".$attName;
-          // Common::zipData($path, $zipFile, $arr);
-
-          // // Preparing attachments
-          // $content = file_get_contents($zipFile);
-          // $content = chunk_split(base64_encode($content));
 
           // a random hash will be necessary to send mixed content
           $separator = md5(time());
@@ -104,6 +94,7 @@
           $txt.= "  <b>Email: </b>".$data['email']."<br/>";
           $txt.= "  <b>Telephone: </b>".$data['phone']."<br/>";
           $txt.= "  <b>Trip details: </b><br/>";
+          $txt.= "  <b>From: </b>".$data["vonStadt"].", <b>To: </b>".$data["nachStadt"]."<br/>";          
           $txt.= "  ".$trip_type."<br/>";
           $txt.= "  Travel Options: ".$data["selTravelOpts"]."<br/>";
           $txt.= "  <b>Submission Date & Time: </b>".$date."<br/><br/>";
@@ -116,13 +107,6 @@
           $body .= "Content-Type: text/html; charset=UTF-8" . $eol;
           $body .= "Content-Transfer-Encoding: 8bit" . $eol. $eol;
           $body .= $txt . $eol;
-
-          // // Email Attachment
-          // $body .= "--" . $separator . $eol;
-          // $body .= "Content-Type: application/octet-stream; name=\"" . $attName . "\"" . $eol;
-          // $body .= "Content-Transfer-Encoding: base64" . $eol;
-          // $body .= "Content-Disposition: attachment" . $eol. $eol;
-          // $body .= $content . $eol;
 
           $body .= "--" . $separator . "--";
 

@@ -81,7 +81,10 @@ main.home{
             height: 35px;
             padding-left: 0;
             border: none;
+            @include plh(rgba($b, .4));
+            color: $b;
             &[name="nachStadt"]{
+              @include plh($acc);
               color: $acc;
             }
           }
@@ -270,6 +273,12 @@ main.home{
           border-radius: 5px;
           height: 66px;
           margin-bottom: 20px;
+          border: 1px solid $tr;
+          transition: all .3s;
+          &:hover{
+            transform: translateY(-5px);
+            border: 1px solid $acc;
+          }
           img{ 
             height: 15px; 
             @include media("<=tab"){ height: 10px; }
@@ -418,14 +427,16 @@ main.home{
         }
       }
       .site-title{
-        font-size: 20px;
+        font-size: 16px;
+        transform: translateY(25px);
         color: rgba($txt-pr, .5);
       }
     }
 
     &.section4{
       @include media("<=tab"){
-        height: 100vh;
+        height: 88vh;
+        padding-bottom: 0;
       }
       .row{
         margin: 50px auto;
@@ -592,11 +603,14 @@ main.home{
           @extend %j-s-b;
           margin-bottom: 10px;
           align-items: flex-start;
-          p{ font-size: 17px; margin-bottom: 0; }
+          p{ 
+            font-size: 17px; margin-bottom: 0; 
+            &.shown{ font-family: $ex-b; }
+          }
           .ctn-exp-icon{
             @extend %j-c;
             padding: 5px;
-            transform: rotate(180deg);
+            transform: rotate(-90deg);
             transition: transform .5s;
             height: 30px;
             width: 30px;

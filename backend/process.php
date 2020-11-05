@@ -23,6 +23,8 @@
 
         $this->db->save("x_wf_trip51887", array(
           "id"                => $trip_id,
+          "x_from"            => $data["vonStadt"],
+          "x_to"              => $data["nachStadt"],
           "x_fname"           => $data["fname"],
           "x_lname"           => $data["lname"],
           "x_email"           => $data["email"],

@@ -4,6 +4,7 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { useForm } from 'react-hooks-helper'
 import Carousel from 'react-img-carousel'
+import * as $ from 'jquery'
 
 import { Modal, useModal } from './Modal'
 import { l, cl } from '../helpers/Log'
@@ -17,10 +18,10 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
     isShowing, toggle, 
     showMoreInfo, toggleMoreInfo,
   } = useModal()
-  , [{ vonStadt, nachStadt, email }, setValue] = useForm({ 
-    vonStadt: 'Berlin', 
-    nachStadt: 'Überraschung',
-    email: ''
+  , [{ vonStadt, nachStadt, newsEmail }, setValue] = useForm({ 
+    vonStadt: '', 
+    nachStadt: '',
+    newsEmail: ''
   })
   , onFormSubmit = e => {
     // l({ vonStadt, nachStadt })
@@ -33,9 +34,22 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
     window.scrollTo({ top: scrollTop, behavior: 'smooth' })
   }
   , onEmailSubmit= e => {
-    l({ email })
+    l({ newsEmail })
     e.preventDefault()
   }  
+
+  useEffect(() => {
+    $('.collapse').on('show.bs.collapse', function (e) {
+      const el = $(`a[href="#${this.id}"]`)
+      el.addClass("shown")
+      el.siblings().addClass("shown")
+    })
+    $('.collapse').on('hide.bs.collapse', function (e) {
+      const el = $(`a[href="#${this.id}"]`)
+      el.removeClass("shown")
+      el.siblings().removeClass("shown")
+    })
+  }, [])
 
   return (
     <>
@@ -69,7 +83,7 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
                         value={vonStadt}
                         onChange={setValue}
                         name="vonStadt"
-                        placeholder="von Stadt"/>
+                        placeholder="Berlin"/>
                     </div>
                     <div className="form-group">
                       <label htmlFor="">NACH</label>
@@ -79,7 +93,7 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
                         value={nachStadt}
                         onChange={setValue}
                         name="nachStadt"
-                        placeholder="nach Stadt"/>
+                        placeholder="Überraschung"/>
                     </div>
                     <button className="btn btn-acc btn-block" type="submit">Mehr auswählen</button>
                   </form>
@@ -290,7 +304,7 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
                   <div className="col-8"><div></div></div>
                   <div className="col-2"><div></div></div>
                 </div>
-                <div className="site-title">Wegafahren.com</div>
+                <div className="site-title">Wegfahren.com</div>
               </div>
               <div className="ctn-layer1">
                 <div className="bm">Best Match</div>
@@ -471,9 +485,14 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
                 </div>
                 
               </Carousel>
-            
-              <img src="assets/trustpilot.jpg" alt=""/>              
             </div>
+          </div>
+        </section>
+
+        <section className="mobile-only p0">
+          <div className="container text-center">
+            <img src="assets/trustpilot.jpg" alt=""/>
+            <button className="btn btn-acc mt-4" onClick={toggle}>Jetzt starten</button>
           </div>
         </section>
         
@@ -487,7 +506,13 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
                 <form onSubmit={onEmailSubmit}>
                   <div className="row">
                     <div className="col-7 pr-0">
-                      <input type="email" className="form-control" placeholder="Ihre E-Mail-Adresse" />
+                      <input 
+                        type="email" 
+                        className="form-control" 
+                        value={newsEmail}
+                        onChange={setValue}
+                        name="newsEmail"
+                        placeholder="Ihre E-Mail-Adresse" />
                     </div>
                     <div className="col-5">
                       <button type="submit" className="btn btn-acc btn-block">Inspieren lassen</button>
@@ -647,9 +672,9 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
             <img className="desktop-only" src="assets/starten.png" alt=""/>
             <p className="desktop-only">Jetzt Überraschungsreise buchen</p>
             <p className="mobile-only">Jetzt Überraschungsreise<br/> buchen</p>
-            <button className="desktop-only btn btn-acc mr-3" onClick={e => goToSection(e, ref0)}>Angebot ansehen</button>
+            <button className="desktop-only btn btn-acc mr-3" onClick={toggle}>Angebot ansehen</button>
             <button className="desktop-only btn btn-sec" onClick={e => goToSection(e, ref0)}>Jetzt vergleichen</button>
-            <button className="mobile-only btn btn-acc" onClick={e => goToSection(e, ref0)}>Jetzt starten</button>
+            <button className="mobile-only btn btn-acc" onClick={toggle}>Jetzt starten</button>
           </div>
         </section>
 
@@ -666,6 +691,8 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
         toggle={toggle}
         showMoreInfo={showMoreInfo}
         toggleMoreInfo={toggleMoreInfo}
+        vonStadt={vonStadt}
+        nachStadt={nachStadt}
       />
     </>
   )
