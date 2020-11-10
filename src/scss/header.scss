@@ -46,7 +46,7 @@ nav.navbar{
     }
   }
   ul.navbar-nav{
-    @include media(">=tab"){ 
+    @include media(">tab"){ 
       position: relative;
       left: 100px;
     }
@@ -59,7 +59,12 @@ nav.navbar{
   }
   li.nav-item{
     font-family: $os-sb;
-    margin: 0 20px;
+    // margin: 0 20px;
+    @include media(">tab") {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
     &:first-of-type{
       @extend %j-s-b;
     }
@@ -72,6 +77,11 @@ nav.navbar{
     }
     a{      
       color: rgba($w, 1);
+      @include media(">tab") {
+        width: 160px;
+        text-align: center;
+        padding: 0!important;
+      }
       &:hover{ 
         font-family: $os-b; 
         // color: rgba($w, .7); 
@@ -81,6 +91,7 @@ nav.navbar{
     button{
       background: $tr;
       border: 1px solid rgba($w, .2);
+      width: 180px;
       &:hover{ 
         color: rgba($sc, 1); 
         font-family: $os-b;

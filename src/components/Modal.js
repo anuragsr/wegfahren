@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, forwardRef } from 'react'
 import { createPortal } from 'react-dom'
 import { useForm, useStep } from 'react-hooks-helper'
 import moment from "moment"
@@ -20,11 +20,11 @@ const steps = [ Step1, Step2, Step3, Step4, Step5 ]
     showMoreInfo, toggleMoreInfo,
   }
 }
-, Modal = ({ 
+, Modal = forwardRef(({ 
   isShowing, toggle, 
   showMoreInfo, toggleMoreInfo,
-  vonStadt, nachStadt
-}) => {
+  vonStadt, nachStadt, isGift
+}, ref) => {
 
   // Form data and Navigation
   const textData = {
@@ -39,9 +39,9 @@ const steps = [ Step1, Step2, Step3, Step4, Step5 ]
     isCare: false,
     selTravelOpts: "",
     startDate: new Date(),
-    isStartFlexible: true,
+    isStartFlexible: false,
     returnDate: DateTime.moment().add( 1, 'day' ).toDate(),
-    isReturnFlexible: true,    
+    isReturnFlexible: false,    
   }
   , [formTextData, setFormText] = useForm(textData)
   , [formObjData, setFormObj] = useState(objData)
@@ -49,7 +49,7 @@ const steps = [ Step1, Step2, Step3, Step4, Step5 ]
   , props = { 
     isShowing, toggle, 
     showMoreInfo, toggleMoreInfo,
-    vonStadt, nachStadt, 
+    vonStadt, nachStadt, isGift,
     formTextData, setFormText, 
     formObjData, setFormObj,
     navigation
@@ -58,7 +58,7 @@ const steps = [ Step1, Step2, Step3, Step4, Step5 ]
 
   return createPortal(
     <>
-      <div className={`modal-outer${isShowing ? " show":""}`}>
+      <div ref={ref} className={`modal-outer${isShowing ? " show":""}`}>
         <div className="modal-overlay"/>
         <div className="modal-wrapper" aria-modal aria-hidden tabIndex={-1} role="dialog">
           <div className="modal-inner">
@@ -152,6 +152,6 @@ const steps = [ Step1, Step2, Step3, Step4, Step5 ]
       </div>
     </>, document.body
   ) 
-}
+})
 
 export { Modal, useModal }

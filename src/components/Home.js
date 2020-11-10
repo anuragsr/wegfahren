@@ -6,23 +6,24 @@ import { useForm } from 'react-hooks-helper'
 import Carousel from 'react-img-carousel'
 import * as $ from 'jquery'
 
-import { Modal, useModal } from './Modal'
+import { Modal } from './Modal'
 import { l, cl } from '../helpers/Log'
 
 import '../scss/home.scss'
 import 'react-img-carousel/lib/carousel.css'
 
-export default function Home({ ref0, ref1, ref2 , ref3 }){
+export default function Home({ 
+  ref0, ref1, ref2 , ref3, 
+  isShowing, toggle, 
+  showMoreInfo, toggleMoreInfo,
+}){
 
-  const { 
-    isShowing, toggle, 
-    showMoreInfo, toggleMoreInfo,
-  } = useModal()
-  , [{ vonStadt, nachStadt, newsEmail }, setValue] = useForm({ 
+  const [{ vonStadt, nachStadt, newsEmail }, setValue] = useForm({ 
     vonStadt: '', 
     nachStadt: '',
     newsEmail: ''
   })
+  , [isGift, setIsGift] = useState(false)  
   , onFormSubmit = e => {
     // l({ vonStadt, nachStadt })
     e.preventDefault()
@@ -34,8 +35,9 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
     window.scrollTo({ top: scrollTop, behavior: 'smooth' })
   }
   , onEmailSubmit= e => {
-    l({ newsEmail })
+    // l({ newsEmail })
     e.preventDefault()
+    toggle()    
   }  
 
   useEffect(() => {
@@ -93,7 +95,17 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
                         value={nachStadt}
                         onChange={setValue}
                         name="nachStadt"
+                        readOnly
                         placeholder="Überraschung"/>
+                    </div>
+                    <div 
+                      className={`ctn-check${isGift? " selected" : ""}`}
+                      onClick={() => setIsGift(!isGift)} 
+                      >
+                      <div className="check-ind">
+                        <div className="check-ind-inner"></div>
+                      </div>
+                      <span>Als Geschenkgutschein</span>
                     </div>
                     <button className="btn btn-acc btn-block" type="submit">Mehr auswählen</button>
                   </form>
@@ -693,6 +705,7 @@ export default function Home({ ref0, ref1, ref2 , ref3 }){
         toggleMoreInfo={toggleMoreInfo}
         vonStadt={vonStadt}
         nachStadt={nachStadt}
+        isGift={isGift}
       />
     </>
   )

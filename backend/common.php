@@ -30,6 +30,20 @@
           else $trip_type.= "No";
           $trip_type.=", Budget: ". $data["selOpts"];
 
+          $isStartFlexible = "No";
+          if($data["isStartFlexible"] === "true") $isStartFlexible = "Yes";
+
+          $isReturnFlexible = "No";
+          if($data["isReturnFlexible"] === "true") $isStartFlexible = "Yes";
+
+          $trip_date = "Start date: ".$data["startDate"];
+          $trip_date.= ", Start date flexible: ".$isStartFlexible;
+          $trip_date.= ", Return date: ".$data["returnDate"];
+          $trip_date.= ", Return date flexible: ".$isReturnFlexible;
+
+          $isGift = "No";
+          if($data["isGift"] === "true") $isGift = "Yes";
+
           $username = $data['fname'] ." ". $data['lname'];
           $headers = "MIME-Version: 1.0". $eol;
           $headers.= "Content-type:text/html;charset=UTF-8". $eol;
@@ -42,8 +56,9 @@
           $txt.= "  Hi ".$username.",<br/><br/>";
           $txt.= "  Thanks for booking the trip.<br/>Below are your details:<br/><br/>";
           $txt.= "  <b>Trip details: </b><br/>";
-          $txt.= "  <b>From: </b>".$data["vonStadt"].", <b>To: </b>".$data["nachStadt"]."<br/>";
+          $txt.= "  <b>From: </b>".$data["vonStadt"].", <b>Is a gift: </b>".$data["isGift"]."<br/>";
           $txt.= "  ".$trip_type."<br/>";
+          $txt.= "  ".$trip_date."<br/>";
           $txt.= "  Travel Options: ".$data["selTravelOpts"]."<br/>";          
           $txt.= "  <b>Your Email: </b>".$data['email']."<br/>";
           $txt.= "  <b>Your Telephone: </b>".$data['phone']."<br/><br/>";      
@@ -86,6 +101,20 @@
           else $trip_type.= "No";
           $trip_type.=", Budget: ". $data["selOpts"];
 
+          $isStartFlexible = "No";
+          if($data["isStartFlexible"] === "true") $isStartFlexible = "Yes";
+
+          $isReturnFlexible = "No";
+          if($data["isReturnFlexible"] === "true") $isStartFlexible = "Yes";
+
+          $trip_date = "Start date: ".$data["startDate"];
+          $trip_date.= ", Start date flexible: ".$isStartFlexible;
+          $trip_date.= ", Return date: ".$data["returnDate"];
+          $trip_date.= ", Return date flexible: ".$isReturnFlexible;
+          
+          $isGift = "No";
+          if($data["isGift"] === "true") $isGift = "Yes";
+
           // Email Text
           $txt = "<div style='font-size: 1rem;'>";
           $txt.= "  Hallo Paul,<br/><br/>";
@@ -94,8 +123,9 @@
           $txt.= "  <b>Email: </b>".$data['email']."<br/>";
           $txt.= "  <b>Telephone: </b>".$data['phone']."<br/>";
           $txt.= "  <b>Trip details: </b><br/>";
-          $txt.= "  <b>From: </b>".$data["vonStadt"].", <b>To: </b>".$data["nachStadt"]."<br/>";          
+          $txt.= "  <b>From: </b>".$data["vonStadt"].", <b>Is a gift: </b>".$isGift."<br/>";          
           $txt.= "  ".$trip_type."<br/>";
+          $txt.= "  ".$trip_date."<br/>";
           $txt.= "  Travel Options: ".$data["selTravelOpts"]."<br/>";
           $txt.= "  <b>Submission Date & Time: </b>".$date."<br/><br/>";
           $txt.= "  Thanks and Regards,<br/>";

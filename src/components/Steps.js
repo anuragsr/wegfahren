@@ -12,8 +12,8 @@ import { l, cl } from '../helpers/Log'
 import 'react-datetime/css/react-datetime.css'
 
 
-const createFormData = (type, formObjData, formTextData, vonStadt, nachStadt) => {
-  l(formObjData, formTextData, vonStadt, nachStadt)
+const createFormData = (type, formObjData, formTextData, vonStadt, nachStadt, isGift) => {
+  l(formObjData, formTextData, vonStadt, nachStadt, isGift)
 
   const formData = new FormData()
   , mySqlDate = function(date) {
@@ -28,6 +28,7 @@ const createFormData = (type, formObjData, formTextData, vonStadt, nachStadt) =>
   formData.append("type", type)
   formData.append("vonStadt", vonStadt)
   formData.append("nachStadt", nachStadt)
+  formData.append("isGift", isGift)
 
   for(const key in formTextData){ formData.append(key, formTextData[key]) }
   for(const key in formObjData){
@@ -419,7 +420,7 @@ const createFormData = (type, formObjData, formTextData, vonStadt, nachStadt) =>
   )
 }
 
-, Step4 = ({ indicators, formObjData, formTextData, setFormText, navigation, toggleMoreInfo, vonStadt, nachStadt }) => {  
+, Step4 = ({ indicators, formObjData, formTextData, setFormText, navigation, toggleMoreInfo, vonStadt, nachStadt, isGift }) => {  
   const { fname, lname, email, phone } = formTextData
   , { previous, next } = navigation
   , { isNext, isCurrent, isPrev } = indicators
@@ -444,7 +445,7 @@ const createFormData = (type, formObjData, formTextData, vonStadt, nachStadt) =>
     new HttpService()    
     .post('/process.php', createFormData(
       "addTrip", formObjData, formTextData,
-      vonStadt, nachStadt
+      vonStadt, nachStadt, isGift
     ))
     .then(res => {
       const { data } = res
@@ -540,7 +541,7 @@ const createFormData = (type, formObjData, formTextData, vonStadt, nachStadt) =>
   )
 }
 
-, Step5 = ({ indicators, navigation, toggle, formObjData, formTextData, toggleMoreInfo, vonStadt, nachStadt }) => {  
+, Step5 = ({ indicators, navigation, toggle, formObjData, formTextData, toggleMoreInfo, vonStadt, nachStadt, isGift }) => {  
   const { isNext, isCurrent, isPrev } = indicators
   , isCurrentClass = isCurrent ? " current" : ""
   , isPrevClass = isPrev ? " prev" : ""
@@ -552,7 +553,7 @@ const createFormData = (type, formObjData, formTextData, vonStadt, nachStadt) =>
     new HttpService()    
     .post('/process.php', createFormData(
       "sendMailToUser", formObjData, formTextData,
-      vonStadt, nachStadt
+      vonStadt, nachStadt, isGift
     ))
     .then(res => {
       const { data } = res

@@ -38,7 +38,7 @@ button.btn-acc{
 button.btn-sec{
   color: $acc;
   font-family: $os-sb;
-  box-shadow: 0 2px 6px 2px rgba(10, 49, 78, 0.15);
+  // box-shadow: 0 2px 6px 2px rgba(10, 49, 78, 0.15);
   height: 40px;
   background-color: $w;
   &:hover{ 
@@ -131,6 +131,33 @@ svg{
   }
   100%{
     opacity: 0;
+  }
+}
+
+.ctn-check{
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  span{ font-family: $ex-r; margin-left: 10px;}
+}
+
+.check-ind{
+  border: 2px solid $acc;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  padding: 2px;
+  .check-ind-inner{
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    background: $acc;
+    border-radius: 50%;
+  }            
+}
+.selected{
+  .check-ind{
+    .check-ind-inner{ opacity: 1; }
   }
 }
 

@@ -25,6 +25,7 @@
           "id"                => $trip_id,
           "x_from"            => $data["vonStadt"],
           "x_to"              => $data["nachStadt"],
+          "x_gift"            => $data["isGift"] === "true" ? "Yes" : "No",
           "x_fname"           => $data["fname"],
           "x_lname"           => $data["lname"],
           "x_email"           => $data["email"],

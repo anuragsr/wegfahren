@@ -7,6 +7,7 @@ import Team from './components/Team'
 import FAQ from './components/FAQ'
 import Impressum from './components/Impressum'
 import ScrollToTop from './helpers/ScrollToTop'
+import { useModal } from './components/Modal'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Header from './components/Header'
@@ -20,6 +21,14 @@ export default function App() {
     , ref2: useRef(null)
     , ref3: useRef(null)
   }
+  , { 
+    isShowing, toggle, 
+    showMoreInfo, toggleMoreInfo,
+  } = useModal()
+  , modalFns = { 
+    isShowing, toggle, 
+    showMoreInfo, toggleMoreInfo,
+  }
 
   return (
     <BrowserRouter basename="/">
@@ -30,9 +39,9 @@ export default function App() {
         <Link to="/impressum">Impressum</Link>  
       </div>
       <ScrollToTop />
-      <Header {...refs}/>
+      <Header {...refs} {...modalFns}/>
       <Switch>
-        <Route exact path="/"><Home {...refs}/></Route>
+        <Route exact path="/"><Home {...refs} {...modalFns}/></Route>
         <Route path="/team"><Team /></Route>
         <Route path="/faq"><FAQ /></Route>
         <Route path="/impressum"><Impressum /></Route>
