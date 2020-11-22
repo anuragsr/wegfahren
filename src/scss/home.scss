@@ -14,6 +14,11 @@ main.home{
       &.mobile-only{ font-size: 35px; } 
     }
     h2.acc.mobile-only{ font-size: 25px; }
+    transform: translateY(100px); opacity: 0;
+    transition: transform .85s, opacity .85s;
+    &.visible{
+      transform: translateY(0px); opacity: 1;
+    }
 
     // Page Sections
     &.section0{
@@ -28,13 +33,15 @@ main.home{
       background-size: 35vh, 25vh;
       background-position: 0% 75%, 100% 55%;
 
+      transform: translateY(0px); opacity: 1;
       @include media("<=tab"){
         padding-top: 15vh;
         height: 90vh;
         overflow: hidden;
+        background-position: 0% 95%, 100% 15%;
       }
       @include media("<mob-sm"){
-        padding-top: 25vh;
+        padding-top: 20vh;
         height: 100vh;
       }
       h1{ 
@@ -58,6 +65,7 @@ main.home{
       .ctn-search{
         background: $sc;
         padding: 35px;
+        border-radius: 10px;
         .title, .subtitle{ margin-bottom: 20px; }
         .title{ 
           font-size: 25px; 
@@ -79,8 +87,13 @@ main.home{
             height: 35px;
             padding-left: 0;
             border: none;
+            @include plh(rgba($b, .4));
+            color: $b;
             &[name="nachStadt"]{
+              @include plh($acc);
               color: $acc;
+              background: $w;
+              cursor: not-allowed;
             }
           }
         }
@@ -97,12 +110,24 @@ main.home{
           // margin-top: 40px; 
         }
       }
+      .container{
+        transform: translateY(100px); opacity: 0;
+        transition: all .5s;
+        transition-delay: 1s;
+        background: $tr;
+      }
+      &.visible-content{
+        .container{
+          transform: translateY(0px); opacity: 1;
+        }
+      }
     }
     
     &.ctn-rating{
       padding: 20px;
       padding-bottom: 35px;
       background: rgba(#134555, .05);
+      transition-delay: 1s;
       @include media("<=tab"){
         padding-bottom: 20px;
       }
@@ -192,8 +217,9 @@ main.home{
           }
         }
       }
-      p.tnc{ 
-        margin-top: 50px;
+      div.foot-link{ 
+        margin-top: 25px;
+        font-family: $ex-r;
         font-size: 15px; 
       }
     }
@@ -267,6 +293,12 @@ main.home{
           border-radius: 5px;
           height: 66px;
           margin-bottom: 20px;
+          border: 1px solid $tr;
+          transition: all .3s;
+          &:hover{
+            transform: translateY(-5px);
+            border: 1px solid $acc;
+          }
           img{ 
             height: 15px; 
             @include media("<=tab"){ height: 10px; }
@@ -415,14 +447,16 @@ main.home{
         }
       }
       .site-title{
-        font-size: 20px;
+        font-size: 16px;
+        transform: translateY(25px);
         color: rgba($txt-pr, .5);
       }
     }
 
     &.section4{
       @include media("<=tab"){
-        height: 100vh;
+        height: 88vh;
+        padding-bottom: 0;
       }
       .row{
         margin: 50px auto;
@@ -434,11 +468,17 @@ main.home{
         padding: 25px;
         border-radius: 4px;
         box-shadow: 0 4px 14px 0 rgba(33, 14, 74, 0.08);
+        transition: all .3s;
+        border: 1px solid $tr;
         @include media("<=tab"){
           background: $w;
           padding: 15px;
           height: auto;
           width: 85vw;
+        }
+        &:hover{ 
+          border: 1px solid $acc; 
+          transform: translateY(-5px);
         }
         .ctn-stars{
           img{ 
@@ -461,9 +501,17 @@ main.home{
           div{ color: $acc; }
           img{ 
             height: 60px;  margin-left: 10px; 
+            @include media("<=tab"){
+              margin-left: 0px; 
+              margin-bottom: 10px; 
+            }
             // position: relative; top: -7px;
           }
           // span{ font-family: $ex-r; }
+          @include media("<=tab"){
+            font-size: 14px;
+            text-align: center;
+          }
         }
       }
       
@@ -553,7 +601,13 @@ main.home{
             margin-top: 100px;
             img{ height: 35px; margin: 10px; }
           }
-          p{ margin: 25px 0; }      
+          p{ 
+            margin: 25px 0; 
+            img{ 
+              height: 15px; 
+              position: relative; top: -1px;
+            }
+          }    
           p:not(:nth-of-type(2)){ font-family: $os-r; }
         }
       }
@@ -561,6 +615,7 @@ main.home{
     
     &.section-faq{
       .ctn-qa{
+        text-align: left;        
         padding: 20px 0;
         margin-left: 25px;
         margin-right: 15px;
@@ -571,11 +626,14 @@ main.home{
           @extend %j-s-b;
           margin-bottom: 10px;
           align-items: flex-start;
-          p{ font-size: 17px; margin-bottom: 0; }
+          p{ 
+            font-size: 17px; margin-bottom: 0; 
+            &.shown{ font-family: $ex-b; }
+          }
           .ctn-exp-icon{
             @extend %j-c;
             padding: 5px;
-            transform: rotate(180deg);
+            transform: rotate(-90deg);
             transition: transform .5s;
             height: 30px;
             width: 30px;

@@ -38,9 +38,10 @@ button.btn-acc{
 button.btn-sec{
   color: $acc;
   font-family: $os-sb;
-  box-shadow: 0 2px 6px 2px rgba(10, 49, 78, 0.15);
+  // box-shadow: 0 2px 6px 2px rgba(10, 49, 78, 0.15);
   height: 40px;
   background-color: $w;
+  border: 1px solid $acc;
   &:hover{ 
     color: $acc;
     cursor: not-allowed;
@@ -82,15 +83,18 @@ input.form-control{
 select.form-control{
   border-radius: 2px;
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.05);
-  border: solid 1px rgba(34, 183, 231, 0.4);
+  border: solid 1px rgba($acc, 0.4);
   -webkit-appearance: none;
   -moz-appearance: none;
   background-color: transparent;
   background-image: url(../img/select-down.jpg);
   background-repeat: no-repeat;
-  background-size: 40px;
-  @include media("<=mob"){ background-position: 92% 50%; }
+  background-size: 30px;
   background-position: 99.5% 50%;
+  @include media("<=mob"){ background-position: 98% 50%; }  
+  &:focus{ 
+    border: solid 1px rgba($acc, 0.4);    
+  }
 }
 
 .ctn-link{
@@ -128,6 +132,33 @@ svg{
   }
   100%{
     opacity: 0;
+  }
+}
+
+.ctn-check{
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  span{ font-family: $ex-r; margin-left: 10px;}
+}
+
+.check-ind{
+  border: 2px solid $acc;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  padding: 2px;
+  .check-ind-inner{
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    background: $acc;
+    border-radius: 50%;
+  }            
+}
+.selected{
+  .check-ind{
+    .check-ind-inner{ opacity: 1; }
   }
 }
 

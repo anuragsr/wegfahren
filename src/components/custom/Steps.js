@@ -12,11 +12,10 @@ import { l, cl } from '../helpers/Log'
 import 'react-datetime/css/react-datetime.css'
 
 
-const createFormData = (type, formObjData, formTextData) => {
-  l(formObjData, formTextData)
+const createFormData = (type, formObjData, formTextData, vonStadt, nachStadt, isGift) => {
+  l(formObjData, formTextData, vonStadt, nachStadt, isGift)
 
   const formData = new FormData()
-  , { files } = formObjData
   , mySqlDate = function(date) {
     const twoDigits = d => {
       if(0 <= d && d < 10) return "0" + d.toString()
@@ -27,14 +26,17 @@ const createFormData = (type, formObjData, formTextData) => {
   }
   
   formData.append("type", type)
+  formData.append("vonStadt", vonStadt)
+  formData.append("nachStadt", nachStadt)
+  formData.append("isGift", isGift)
 
   for(const key in formTextData){ formData.append(key, formTextData[key]) }
   for(const key in formObjData){
-    switch(key){
-      case "files": files.forEach(x => formData.append("files[]", x)); break;
-      case "filled": formData.append(key, formObjData[key]["text"]); break;
-      case "conWeights": formData.append(key, formObjData[key].map(w => w+" kg").join(", ")); break;
-      case "date": formData.append(key, mySqlDate(formObjData[key])); break;
+    switch(key){      
+      case "startDate":
+      case "returnDate": 
+        formData.append(key, mySqlDate(formObjData[key])); break;
+
       default: formData.append(key, formObjData[key]);
     }
   }
@@ -93,11 +95,39 @@ const createFormData = (type, formObjData, formTextData) => {
         <div className="container">
           <div className="ctn-heading">
             <h4>Art der Reise<img onClick={toggleMoreInfo} src="assets/info.png" alt=""/></h4>
-            <div className="subtitle">Schritt 1 von 7</div>
+            <div className="subtitle">Schritt 1 von 5</div>
           </div>
           <div className="ctn-content">
             <h5>Haben Sie Anforderungen an Ihrer Überraschungsreise?</h5>
-            <div className="ctn-box">{
+            <div className="ctn-box desktop-only">{
+              opts.slice(0, opts.length / 2).map((opt, idx) => (
+                <div key={idx}
+                  className={`box text-center${opt.selected ? " selected":""}`}
+                  onClick={() => {setOpt(idx)}}
+                >
+                  <img src={opt.img} alt=""/>
+                  <span dangerouslySetInnerHTML={{__html: opt.name}}/>
+                  <div className="check-ind">
+                    <div className="check-ind-inner"></div>
+                  </div>
+                </div>
+              ))
+            }</div>
+            <div className="ctn-box desktop-only">{
+              opts.slice(opts.length / 2, opts.length).map((opt, idx) => (
+                <div key={idx}
+                  className={`box text-center${opt.selected ? " selected":""}`}
+                  onClick={() => {setOpt(idx + opts.length / 2)}}
+                >
+                  <img src={opt.img} alt=""/>
+                  <span dangerouslySetInnerHTML={{__html: opt.name}}/>
+                  <div className="check-ind">
+                    <div className="check-ind-inner"></div>
+                  </div>
+                </div>
+              ))
+            }</div>
+            <div className="ctn-box mobile-only">{
               opts.map((opt, idx) => (
                 <div key={idx}
                   className={`box text-center${opt.selected ? " selected":""}`}
@@ -140,9 +170,9 @@ const createFormData = (type, formObjData, formTextData) => {
   , isNextClass = isNext ? " next" : ""
   , [isCare, setIsCare] = useState(false)
   , [opts, setOpts] = useState([
-    { name: "Low Budget", img: "assets/opt1.png", selected: true },
-    { name: "Medium Budget", img: "assets/opt2.png", selected: false },
-    { name: "High Budget", img: "assets/opt3.png", selected: false },
+    { name: "Low Budget", img: "assets/€.png", selected: true },
+    { name: "Medium Budget", img: "assets/€€.png", selected: false },
+    { name: "High Budget", img: "assets/€€€.png", selected: false },
   ])
   , setOpt = idx => {
     // To select just one
@@ -201,7 +231,7 @@ const createFormData = (type, formObjData, formTextData) => {
           
           <div className="ctn-heading">
             <h4>Art der Reise<img onClick={toggleMoreInfo} src="assets/info.png" alt=""/></h4>
-            <div className="subtitle">Schritt 2 von 7</div>
+            <div className="subtitle">Schritt 2 von 5</div>
           </div>
 
           <div className="ctn-content">
@@ -259,7 +289,7 @@ const createFormData = (type, formObjData, formTextData) => {
   , isCurrentClass = isCurrent ? " current" : ""
   , isPrevClass = isPrev ? " prev" : ""
   , isNextClass = isNext ? " next" : ""
-  , yesterday = DateTime.moment().subtract( 1, 'day' )
+  , yesterday = DateTime.moment().subtract( 1, 'day' )  
   , validDate = current => current.isAfter(yesterday)
   , validReturnDate = current => current.isAfter(startDate)
   // , setDateValue = e => {
@@ -306,7 +336,7 @@ const createFormData = (type, formObjData, formTextData) => {
         <div className="container">
           <div className="ctn-heading">
             <h4>Zeitpunkt<img onClick={toggleMoreInfo} src="assets/info.png" alt=""/></h4>
-            <div className="subtitle">Schritt 3 von 7</div>
+            <div className="subtitle">Schritt 3 von 5</div>
           </div>
 
           <div className="ctn-content">
@@ -390,116 +420,8 @@ const createFormData = (type, formObjData, formTextData) => {
   )
 }
 
-, Step4 = ({ indicators, formObjData, setFormObj, formTextData, navigation, toggleMoreInfo }) => {  
-  const { previous, next } = navigation
-  , { isNext, isCurrent, isPrev } = indicators
-  , isCurrentClass = isCurrent ? " current" : ""
-  , isPrevClass = isPrev ? " prev" : ""
-  , isNextClass = isNext ? " next" : ""
-  , [isDateCommit, setIsDateCommit] = useState(false)
-  , onDateClick = info => {
-    const { date, dayEl, jsEvent } = info
-
-    jsEvent.preventDefault() // don't let the browser navigate
-    
-    document
-    .querySelectorAll(".fc-daygrid-day.active")
-    .forEach(el => el.classList.remove("active"))
-    dayEl.classList.add("active")
-
-    setFormObj(prev => ({ ...prev, date }))
-  }
-  , doNext = () => {
-    l(formObjData, formTextData)
-    next()
-  }
-
-  useEffect(() => {
-    setFormObj(prev => ({ ...prev, isDateCommit }))
-  }, [isDateCommit, setFormObj])
-
-  return (
-    <div className={`step step4${isCurrentClass}${isPrevClass}${isNextClass}`}>
-      <div className="inner">
-
-        <div className="container">
-          <div className="ctn-heading">
-            <h4>Datum<img onClick={toggleMoreInfo} src="assets/info.png" alt=""/></h4>
-            <div className="subtitle">Schritt 4 von 7</div>
-          </div>
-          <div className="ctn-content">            
-            <h5>Wann wollen Sie ihre Ware verschiffen?</h5>
-            <div className="ctn-calendar">
-              
-            </div>
-            <div 
-              className={`ctn-check${isDateCommit? " selected" : ""}`}
-              onClick={() => setIsDateCommit(!isDateCommit)} 
-              >
-              <div className="check-ind">
-                <div className="check-ind-inner"></div>
-              </div>
-              <span>Ich will mich nicht festlegen.</span>
-            </div>
-          </div>
-          <div className="ctn-btn">
-            <button className="btn btn-sec mr-2" onClick={previous}>Zurück</button>
-            <button className="btn btn-acc" onClick={doNext}>Fortfahren</button>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  )
-}
-
-, Step5 = ({ indicators, formObjData, setFormObj, formTextData, setFormText, navigation, toggleMoreInfo }) => {  
-  const { details } = formTextData
-  , { files } = formObjData
-  , { previous, next } = navigation
-  , { isNext, isCurrent, isPrev } = indicators
-  , isCurrentClass = isCurrent ? " current" : ""
-  , isPrevClass = isPrev ? " prev" : ""
-  , isNextClass = isNext ? " next" : ""
-  , doNext = () => {
-    l(formObjData, formTextData)
-    next()
-  }
-
-  return (
-    <div className={`step step5${isCurrentClass}${isPrevClass}${isNextClass}`}>
-      <div className="inner">
-
-        <div className="container">
-          <div className="ctn-heading">
-            <h4>Beschreibung<img onClick={toggleMoreInfo} src="assets/info.png" alt=""/></h4>
-            <div className="subtitle">Schritt 5 von 7</div>
-          </div>
-          <div className="ctn-content">            
-            <h5>Möchsten Sie uns noch Dokumente zusenden?</h5>
-            <textarea
-              className="textarea form-control"
-              name="details" 
-              value={details} 
-              placeholder={"* Lorem ipsum dolo iris\x0a* Lorem ipsum dolo iris\x0a* Lorem ipsum dolo iris"}
-              onChange={setFormText}
-              >
-            </textarea>
-            <h5>Zusätzliche  Unterlagen, Referenzen, o.ä. (optional)</h5>
-          </div>
-          <div className="ctn-btn">
-            <button className="btn btn-sec mr-2" onClick={previous}>Zurück</button>
-            <button className="btn btn-acc" onClick={doNext}>Fortfahren</button>
-          </div>          
-        </div>
-
-      </div>
-    </div>
-  )
-}
-
-, Step6 = ({ indicators, formObjData, formTextData, setFormText, navigation, toggleMoreInfo }) => {  
-  const { email, phone } = formTextData
+, Step4 = ({ indicators, formObjData, formTextData, setFormText, navigation, toggleMoreInfo, vonStadt, nachStadt, isGift }) => {  
+  const { fname, lname, email, phone } = formTextData
   , { previous, next } = navigation
   , { isNext, isCurrent, isPrev } = indicators
   , isCurrentClass = isCurrent ? " current" : ""
@@ -509,27 +431,71 @@ const createFormData = (type, formObjData, formTextData) => {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     return re.test(String(emailStr).toLowerCase())
   }
-  , isFormValid = () => phone.length > 0 && isEmailValid(email)
-  , doNext = () => {
-    l(formObjData, formTextData)
-    next()
+  , isFormValid = () => (
+    fname.length > 0 && 
+    lname.length > 0 && 
+    phone.length > 0 && 
+    isEmailValid(email)
+  )
+  , [submitted, setSubmitted] = useState(false)  
+  , submitForm = e => {
+    setSubmitted(true)
+    // setTimeout(() => { next() }, 1000)
+    
+    new HttpService()    
+    .post('/process.php', createFormData(
+      "addTrip", formObjData, formTextData,
+      vonStadt, nachStadt, isGift
+    ))
+    .then(res => {
+      const { data } = res
+      l(data)
+      if(data.result) next(e)
+      else alert(data.message)      
+    })
   }
 
   return (
-    <div className={`step step6${isCurrentClass}${isPrevClass}${isNextClass}`}>
+    <div className={`step step4${isCurrentClass}${isPrevClass}${isNextClass}`}>
       <div className="inner">
 
         <div className="container">
           <div className="ctn-heading">
-            <img src="assets/received.jpg" alt=""/><br/>            
-            <h4>Angebot erhalten<img onClick={toggleMoreInfo} src="assets/info.png" alt=""/></h4>
+            <img className="globe" src="assets/globe.png" alt=""/><br/><br/>
+            <h4>Flugangebot erhalten<img onClick={toggleMoreInfo} src="assets/info.png" alt=""/></h4>
             <div className="subtitle">
               Nachdem Sie ihre Kontaktdaten eingetragen haben, werden wir uns mit einem personalisierten Angebot melden.
             </div>
           </div>
+          <pre>{isFormValid()}</pre>
           <div className="ctn-content row">
             <div className="col-md-3"></div>
-            <div className="form col-md-6">
+            <div className="form col-md-6">            
+              <div className="row">
+                <div className="col-6 pr-0">
+                  <div className="input-group">
+                    <input
+                      placeholder="Vorname"
+                      className="input form-control"
+                      name="fname"
+                      type="text"
+                      value={fname} 
+                      onChange={setFormText}/>
+                  </div>
+                </div>
+                <div className="col-6">                  
+                  <div className="input-group">
+                    <input
+                      placeholder="Nachname"
+                      className="input form-control"
+                      name="lname"
+                      type="text"
+                      value={lname} 
+                      onChange={setFormText}/>
+                  </div>
+                </div>
+              </div>
+
               <div className="input-group">
                 <input
                   placeholder="Tragen Sie Ihre Telfonnummer ein"
@@ -551,9 +517,20 @@ const createFormData = (type, formObjData, formTextData) => {
               </div>
               
               <div className="ctn-btn">
-                <button className="btn btn-sec mr-2" onClick={previous}>Zurück</button>
-                <button className="btn btn-acc" disabled={!isFormValid()} onClick={doNext}>Bestätigen</button>
-              </div>          
+                <button 
+                  className="btn btn-sec mr-2" 
+                  onClick={previous}
+                  disabled={submitted}
+                >Zurück</button>
+                <button 
+                  className="btn btn-acc" 
+                  disabled={!isFormValid() || submitted} 
+                  onClick={submitForm}
+                >
+                  { !submitted && <>Bestätigen</> }
+                  { submitted && <Dots /> }
+                </button>
+              </div>
             </div>
             <div className="col-md-3"></div>
           </div>
@@ -564,146 +541,20 @@ const createFormData = (type, formObjData, formTextData) => {
   )
 }
 
-, Step7 = ({ indicators, formObjData, formTextData, setFormText, navigation, toggleMoreInfo }) => {  
-  const { fname, lname, street, postcode, place } = formTextData
-  , { previous, next } = navigation
-  , { isNext, isCurrent, isPrev } = indicators
-  , isCurrentClass = isCurrent ? " current" : ""
-  , isPrevClass = isPrev ? " prev" : ""
-  , isNextClass = isNext ? " next" : ""
-  , [submitted, setSubmitted] = useState(false)
-  , isFormValid = () => (
-    fname.length > 0
-    && lname.length > 0
-    && street.length > 0
-    && postcode.length > 0
-    && place.length > 0
-  )
-  , submitForm = e => {
-    setSubmitted(true)
-    
-    new HttpService()    
-    .post('/process.php', createFormData("addShipment", formObjData, formTextData))
-    .then(res => {
-      const { data } = res
-      l(data)
-      if(data.result) next(e)
-      else alert(data.message)
-      // setTimeout(() => {
-      // }, 1000)
-    })
-  }
-
-  return (
-    <div className={`step step7${isCurrentClass}${isPrevClass}${isNextClass}`}>
-      <div className="inner">
-
-        <div className="container">
-          <div className="ctn-heading">
-            <h4>Beschreibung<img onClick={toggleMoreInfo} src="assets/info.png" alt=""/></h4>
-            <div className="subtitle">Schritt 7 von 7</div>
-          </div>
-          <div className="ctn-content">
-            <h5>Möchsten Sie uns noch Dokumente zusenden?</h5>
-            <div className="row">
-              <div className="form col-md-8">
-                <div className="row">
-                  <div className="col-12">                  
-                    <div className="input-group">
-                      <input
-                        placeholder="Vorname"
-                        className="input form-control"
-                        name="fname"
-                        type="text"
-                        value={fname} 
-                        onChange={setFormText}/>
-                    </div>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-12">                  
-                    <div className="input-group">
-                      <input
-                        placeholder="Nachname"
-                        className="input form-control"
-                        name="lname"
-                        type="text"
-                        value={lname} 
-                        onChange={setFormText}/>
-                    </div>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-12">                  
-                    <div className="input-group">
-                      <input
-                        placeholder="Straße und Hausnummer"
-                        className="input form-control"
-                        name="street"
-                        type="text"
-                        value={street} 
-                        onChange={setFormText}/>
-                    </div>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-6">                  
-                    <div className="input-group">
-                      <input
-                        placeholder="Postleizahl"
-                        className="input form-control"
-                        name="postcode"
-                        type="text"
-                        value={postcode} 
-                        onChange={setFormText}/>
-                    </div>
-                  </div>
-                  <div className="col-6">                  
-                    <div className="input-group">
-                      <input
-                        placeholder="Ort"
-                        className="input form-control"
-                        name="place"
-                        type="text"
-                        value={place} 
-                        onChange={setFormText}/>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="ctn-btn">
-            <button 
-              className="btn btn-sec mr-2" 
-              onClick={previous}
-              disabled={submitted}
-            >Zurück</button>
-            <button 
-              className="btn btn-acc" 
-              disabled={!isFormValid() || submitted} 
-              onClick={submitForm}
-            >
-              { !submitted && <>Angebot erhalten</> }
-              { submitted && <Dots /> }
-            </button>
-          </div>  
-        </div>
-        
-      </div>
-    </div>
-  )
-}
-
-, Step8 = ({ indicators, toggle, formObjData, formTextData, toggleMoreInfo }) => {  
+, Step5 = ({ indicators, navigation, toggle, formObjData, formTextData, toggleMoreInfo, vonStadt, nachStadt, isGift }) => {  
   const { isNext, isCurrent, isPrev } = indicators
   , isCurrentClass = isCurrent ? " current" : ""
   , isPrevClass = isPrev ? " prev" : ""
   , isNextClass = isNext ? " next" : ""
   , closeQuestionnaire = () => {
     toggle()
+    navigation.next()
+
     new HttpService()    
-    .post('/process.php', createFormData("sendMailToUser", formObjData, formTextData))
+    .post('/process.php', createFormData(
+      "sendMailToUser", formObjData, formTextData,
+      vonStadt, nachStadt, isGift
+    ))
     .then(res => {
       const { data } = res
       l(data)
@@ -711,10 +562,10 @@ const createFormData = (type, formObjData, formTextData) => {
   }
 
   return (
-    <div className={`step step8${isCurrentClass}${isPrevClass}${isNextClass}`}>
+    <div className={`step step5${isCurrentClass}${isPrevClass}${isNextClass}`}>
       <div className="inner">
 
-      <div className="container">
+        <div className="container">
           <div className="ctn-heading">
             <h4>Fertig<img onClick={toggleMoreInfo} src="assets/info.png" alt=""/></h4>
             <img className="final" src="assets/final.gif" alt=""/>
@@ -736,4 +587,4 @@ const createFormData = (type, formObjData, formTextData) => {
   )
 }
 
-export { Step1, Step2, Step3, Step4, Step5, Step6, Step7, Step8 }
+export { Step1, Step2, Step3, Step4, Step5 }
