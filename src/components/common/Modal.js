@@ -4,7 +4,7 @@ import { useForm, useStep } from 'react-hooks-helper'
 import moment from "moment"
 import DateTime from 'react-datetime'
 
-import { Step1, Step2, Step3, Step4, Step5 } from "./Steps"
+import { Step1, Step2, Step3, Step4, Step5 } from "../custom/Steps"
 import { l, cl } from '../helpers/Log'
 
 const steps = [ Step1, Step2, Step3, Step4, Step5 ]

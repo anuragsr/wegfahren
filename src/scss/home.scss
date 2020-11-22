@@ -14,6 +14,11 @@ main.home{
       &.mobile-only{ font-size: 35px; } 
     }
     h2.acc.mobile-only{ font-size: 25px; }
+    transform: translateY(100px); opacity: 0;
+    transition: transform .85s, opacity .85s;
+    &.visible{
+      transform: translateY(0px); opacity: 1;
+    }
 
     // Page Sections
     &.section0{
@@ -28,6 +33,7 @@ main.home{
       background-size: 35vh, 25vh;
       background-position: 0% 75%, 100% 55%;
 
+      transform: translateY(0px); opacity: 1;
       @include media("<=tab"){
         padding-top: 15vh;
         height: 90vh;
@@ -104,12 +110,24 @@ main.home{
           // margin-top: 40px; 
         }
       }
+      .container{
+        transform: translateY(100px); opacity: 0;
+        transition: all .5s;
+        transition-delay: 1s;
+        background: $tr;
+      }
+      &.visible-content{
+        .container{
+          transform: translateY(0px); opacity: 1;
+        }
+      }
     }
     
     &.ctn-rating{
       padding: 20px;
       padding-bottom: 35px;
       background: rgba(#134555, .05);
+      transition-delay: 1s;
       @include media("<=tab"){
         padding-bottom: 20px;
       }

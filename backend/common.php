@@ -157,7 +157,6 @@
         break;
 
       }
-
     }
 
     public static function generateRand($length = 4) {
@@ -241,7 +240,6 @@
       }
       return false;
     }
-
   }
 
   // Reading the input
