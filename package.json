@@ -12,7 +12,6 @@
     "file-saver": "^2.0.2",
     "jquery": "^3.5.1",
     "moment": "^2.29.1",
-    "node-sass": "^4.14.1",
     "popper.js": "^1.16.1",
     "react": "^16.13.1",
     "react-datetime": "^3.0.4",
@@ -20,7 +19,7 @@
     "react-hooks-helper": "^1.6.0",
     "react-img-carousel": "^1.7.0",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.3",
+    "react-scripts": "^4.0.0",
     "react-scrollmagic": "^2.2.0"
   },
   "scripts": {
@@ -43,5 +42,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "sass": "^1.49.7"
   }
 }
