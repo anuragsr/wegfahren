@@ -28,10 +28,12 @@ export default function App() {
   , modalFns = { 
     isShowing, toggle, 
     showMoreInfo, toggleMoreInfo,
-  }
+  };
+
+  const { REACT_APP_PROJECT_PATH } = process.env;
 
   return (
-    <BrowserRouter basename="/">
+    <BrowserRouter basename={REACT_APP_PROJECT_PATH}>
       <div className="ctn-link">
         <Link to="/">Home</Link>
         <Link to="/team">Team</Link>
